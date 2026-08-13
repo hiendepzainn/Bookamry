@@ -1,14 +1,14 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./styles/global.css";
+import "styles/global.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import BooksPage from "./pages/books";
-import AboutPage from "./pages/about";
-import LoginPage from "./pages/login";
-import RegisterPage from "./pages/register";
-import Layout from "./layout";
-import Homepage from "./pages/homepage";
-import ErrorPage from "./pages/error";
+import BooksPage from "pages/books";
+import AboutPage from "pages/about";
+import LoginPage from "pages/login";
+import RegisterPage from "pages/register";
+import Layout from "@/layout";
+import Homepage from "pages/homepage";
+import ErrorPage from "pages/error";
 
 const router = createBrowserRouter([
   {
