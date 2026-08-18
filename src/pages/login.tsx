@@ -1,13 +1,18 @@
 import { login } from "@/services/auth.api";
 import { App, Button, Divider, Form, Input } from "antd";
 import type { FormProps } from "antd";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const { notification, message } = App.useApp();
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+
   const onFinish: FormProps<IFieldLogin>["onFinish"] = async (values) => {
+    setLoading(true);
+
     const res = await login(values);
 
     if (res.data) {
@@ -22,6 +27,8 @@ const LoginPage = () => {
         description: res.message,
         placement: "topRight",
       });
+
+      setLoading(false);
     }
   };
 
@@ -76,7 +83,7 @@ const LoginPage = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={loading}>
               Đăng nhập
             </Button>
           </Form.Item>

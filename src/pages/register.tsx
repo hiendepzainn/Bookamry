@@ -1,13 +1,18 @@
 import { register } from "@/services/auth.api";
 import { App, Button, Divider, Form, Input } from "antd";
 import type { FormProps } from "antd";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
   const { message } = App.useApp();
 
+  const [loading, setLoading] = useState(false);
+
   const onFinish: FormProps<IFieldRegister>["onFinish"] = async (values) => {
+    setLoading(true);
+
     const res = await register(values);
 
     if (res.data) {
@@ -15,6 +20,8 @@ const RegisterPage = () => {
       navigate("/login");
     } else {
       message.error(res.message);
+
+      setLoading(false);
     }
   };
 
@@ -175,7 +182,7 @@ const RegisterPage = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={loading}>
               Đăng ký
             </Button>
           </Form.Item>
