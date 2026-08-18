@@ -6,6 +6,11 @@ declare global {
     phone: string;
   }
 
+  interface IFieldLogin {
+    username: string;
+    password: string;
+  }
+
   //type Axios Response
   interface IBackendResponse<T> {
     statusCode: number;
@@ -15,11 +20,29 @@ declare global {
     data?: T;
   }
 
+  //--------REGISTER---------
   interface IDataRegister {
     email: string;
     fullName: string;
     _id: string;
   }
+  //--------REGISTER---------
+
+  //--------LOGIN--------------------------------------------------
+  interface IDataLogin<T> {
+    access_token: string;
+    user: T;
+  }
+
+  interface IDataLoginUser {
+    avatar: string;
+    email: string;
+    fullName: string;
+    id: string;
+    phone: string;
+    role: string;
+  }
+  //--------LOGIN--------------------------------------------------
 
   //type Axios Response
 }

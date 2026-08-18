@@ -5,4 +5,12 @@ const register = (data: IFieldRegister) => {
   return instance1.post<unknown, IBackendResponse<IDataRegister>>(url, data);
 };
 
-export { register };
+const login = (data: IFieldLogin) => {
+  const url = "/api/v1/auth/login";
+  return instance1.post<unknown, IBackendResponse<IDataLogin<IDataLoginUser>>>(
+    url,
+    data,
+  );
+};
+
+export { register, login };
