@@ -1,0 +1,22 @@
+import axios from "axios";
+
+const instance1 = axios.create({
+  baseURL: "http://localhost:8080",
+});
+
+instance1.interceptors.response.use(
+  function (response) {
+    if (response && response.data) {
+      return response.data;
+    }
+    return response;
+  },
+  function (error) {
+    if (error && error.response && error.response.data) {
+      return error.response.data;
+    }
+    return Promise.reject(error);
+  },
+);
+
+export default instance1;
