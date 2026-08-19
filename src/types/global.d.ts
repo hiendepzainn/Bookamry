@@ -3,8 +3,10 @@ declare global {
   interface IContext {
     authenticated: boolean;
     user: IDataLoginUser;
+    loadingApp: boolean;
     setAuthenticated: (value: boolean) => void;
     setUser: (user: IDataLoginUser) => void;
+    setLoadingApp: (value: boolean) => void;
   }
   //--------CONTEXT---------
 

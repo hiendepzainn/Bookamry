@@ -6,6 +6,7 @@ interface IProps {
 
 export const MyContext = createContext<IContext>({
   authenticated: false,
+  setAuthenticated: () => {},
   user: {
     avatar: "",
     email: "",
@@ -14,8 +15,9 @@ export const MyContext = createContext<IContext>({
     phone: "",
     role: "",
   },
-  setAuthenticated: () => {},
   setUser: () => {},
+  loadingApp: false,
+  setLoadingApp: () => {},
 });
 
 const AppContext = (props: IProps) => {
@@ -28,10 +30,18 @@ const AppContext = (props: IProps) => {
     role: "",
   });
   const [authenticated, setAuthenticated] = useState<boolean>(false);
+  const [loadingApp, setLoadingApp] = useState<boolean>(false);
 
   return (
     <MyContext.Provider
-      value={{ user, setUser, authenticated, setAuthenticated }}
+      value={{
+        user,
+        setUser,
+        authenticated,
+        setAuthenticated,
+        loadingApp,
+        setLoadingApp,
+      }}
     >
       {props.children}
     </MyContext.Provider>

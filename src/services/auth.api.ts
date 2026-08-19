@@ -18,7 +18,11 @@ const fetchAccount = () => {
   return instance1.get<
     unknown,
     IBackendResponse<IDataFetchAccount<IDataLoginUser>>
-  >(url);
+  >(url, {
+    headers: {
+      delay: 3000,
+    },
+  });
 };
 
 export { register, login, fetchAccount };

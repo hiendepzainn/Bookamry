@@ -4,15 +4,21 @@ import AppHeader from "./components/app.header";
 import { useContext, useEffect } from "react";
 import { fetchAccount } from "./services/auth.api";
 import { MyContext } from "./components/context/app.context";
+import { Spin } from "antd";
 
 const Layout = () => {
-  const { setAuthenticated, setUser } = useContext(MyContext);
+  const { setAuthenticated, setUser, loadingApp, setLoadingApp } =
+    useContext(MyContext);
 
   const fetchUser = async () => {
+    setLoadingApp(true);
+
     const res = await fetchAccount();
+
     if (res.data) {
       setAuthenticated(true);
       setUser(res.data.user);
+      setLoadingApp(false);
     }
   };
 
@@ -21,9 +27,27 @@ const Layout = () => {
   }, []);
   return (
     <>
-      <AppHeader />
-      <Outlet />
-      <AppFooter />
+      {loadingApp === true ? (
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            marginTop: "-50px",
+            marginLeft: "-50px",
+            width: "100px",
+            height: "100px",
+          }}
+        >
+          <Spin fullscreen={true} size="large" />
+        </div>
+      ) : (
+        <>
+          <AppHeader />
+          <Outlet />
+          <AppFooter />
+        </>
+      )}
     </>
   );
 };
