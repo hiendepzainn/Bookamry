@@ -1,4 +1,20 @@
 declare global {
+  //--------CONTEXT---------
+  interface IContext {
+    authenticated: boolean;
+    user: {
+      avatar: string;
+      email: string;
+      fullName: string;
+      id: string;
+      phone: string;
+      role: string;
+    };
+    setAuthenticated: (value: boolean) => void;
+    setUser: (user: IDataLoginUser) => void;
+  }
+  //--------CONTEXT---------
+
   interface IFieldRegister {
     fullName: string;
     email: string;

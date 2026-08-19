@@ -10,6 +10,7 @@ import Layout from "@/layout";
 import Homepage from "pages/homepage";
 import ErrorPage from "pages/error";
 import { App } from "antd";
+import AppContext from "./components/context/app.context";
 
 const router = createBrowserRouter([
   {
@@ -42,7 +43,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <App>
-      <RouterProvider router={router} />
+      <AppContext>
+        <RouterProvider router={router} />
+      </AppContext>
     </App>
   </StrictMode>,
 );

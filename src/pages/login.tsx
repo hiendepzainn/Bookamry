@@ -1,10 +1,12 @@
+import { MyContext } from "@/components/context/app.context";
 import { login } from "@/services/auth.api";
 import { App, Button, Divider, Form, Input } from "antd";
 import type { FormProps } from "antd";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
+  const { setAuthenticated, setUser } = useContext(MyContext);
   const { notification, message } = App.useApp();
   const navigate = useNavigate();
 
@@ -16,6 +18,9 @@ const LoginPage = () => {
     const res = await login(values);
 
     if (res.data) {
+      setAuthenticated(false);
+      setUser(res.data.user);
+
       message.success("Login successful!");
 
       localStorage.setItem("access_token", res.data.access_token);
