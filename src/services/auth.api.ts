@@ -13,4 +13,12 @@ const login = (data: IFieldLogin) => {
   );
 };
 
-export { register, login };
+const fetchAccount = () => {
+  const url = "/api/v1/auth/account";
+  return instance1.get<
+    unknown,
+    IBackendResponse<IDataFetchAccount<IDataLoginUser>>
+  >(url);
+};
+
+export { register, login, fetchAccount };

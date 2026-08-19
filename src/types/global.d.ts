@@ -2,14 +2,7 @@ declare global {
   //--------CONTEXT---------
   interface IContext {
     authenticated: boolean;
-    user: {
-      avatar: string;
-      email: string;
-      fullName: string;
-      id: string;
-      phone: string;
-      role: string;
-    };
+    user: IDataLoginUser;
     setAuthenticated: (value: boolean) => void;
     setUser: (user: IDataLoginUser) => void;
   }
@@ -59,6 +52,12 @@ declare global {
     role: string;
   }
   //--------LOGIN--------------------------------------------------
+
+  //--------FETCH ACCOUNT-------------------
+  interface IDataFetchAccount<T> {
+    user: T;
+  }
+  //--------FETCH ACCOUNT-------------------
 
   //type Axios Response
 }
