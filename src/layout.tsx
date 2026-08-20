@@ -20,6 +20,8 @@ const Layout = () => {
       setUser(res.data.user);
       setLoadingApp(false);
     }
+
+    setLoadingApp(false);
   };
 
   useEffect(() => {
