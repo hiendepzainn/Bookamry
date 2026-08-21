@@ -18,7 +18,7 @@ const LoginPage = () => {
     const res = await login(values);
 
     if (res.data) {
-      setAuthenticated(false);
+      setAuthenticated(true);
       setUser(res.data.user);
 
       message.success("Login successful!");
