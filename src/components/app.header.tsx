@@ -34,6 +34,14 @@ const AppHeader = () => {
       label: <Link to="/logout">Logout</Link>,
       danger: true,
     },
+    {
+      key: "413",
+      label: <Link to="/books">books client</Link>,
+    },
+    {
+      key: "235",
+      label: <Link to="/checkout">checkout</Link>,
+    },
   ];
 
   return (

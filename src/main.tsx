@@ -5,20 +5,23 @@ import BooksPage from "pages/books";
 import AboutPage from "pages/about";
 import LoginPage from "pages/login";
 import RegisterPage from "pages/register";
-import Layout from "@/layout";
+import LayoutClient from "@/layout/layoutClient";
 import Homepage from "pages/homepage";
 import ErrorPage from "pages/error";
 import { App } from "antd";
 import AppContext from "./components/context/app.context";
 import CheckoutPage from "./pages/checkout";
-import AdminPage from "./pages/admin";
 import AuthenticationRoute from "./components/auth/authentication";
 import AuthorizationRoute from "./components/auth/authorization";
+import LayoutAdmin from "./layout/layoutAdmin";
+import BooksPageAdmin from "./pages/admin/books";
+import UsersPageAdmin from "./pages/admin/users";
+import HomepageAdmin from "./pages/admin/homepage";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: <LayoutClient />,
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Homepage /> },
@@ -41,13 +44,41 @@ const router = createBrowserRouter([
           </AuthenticationRoute>
         ),
       },
+    ],
+  },
 
+  {
+    path: "/admin",
+    element: <LayoutAdmin />,
+    children: [
       {
-        path: "admin",
+        index: true,
         element: (
           <AuthenticationRoute>
             <AuthorizationRoute>
-              <AdminPage />
+              <HomepageAdmin />
+            </AuthorizationRoute>
+          </AuthenticationRoute>
+        ),
+      },
+
+      {
+        path: "books",
+        element: (
+          <AuthenticationRoute>
+            <AuthorizationRoute>
+              <BooksPageAdmin />
+            </AuthorizationRoute>
+          </AuthenticationRoute>
+        ),
+      },
+
+      {
+        path: "users",
+        element: (
+          <AuthenticationRoute>
+            <AuthorizationRoute>
+              <UsersPageAdmin />
             </AuthorizationRoute>
           </AuthenticationRoute>
         ),
