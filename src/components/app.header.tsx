@@ -2,17 +2,40 @@ import { useContext } from "react";
 import { MyContext } from "./context/app.context";
 import type { MenuProps } from "antd";
 import { Link } from "react-router-dom";
-import { Avatar, Badge, Button, Dropdown, Input, Space } from "antd";
+import { App, Avatar, Badge, Button, Dropdown, Input, Space } from "antd";
 import {
   SearchOutlined,
   ShoppingCartOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { logout } from "@/services/auth.api";
 
 const AppHeader = () => {
+  const { message } = App.useApp();
   const CART_ITEM_COUNT = 3;
 
-  const { user, authenticated } = useContext(MyContext);
+  const { user, authenticated, setAuthenticated, setUser } =
+    useContext(MyContext);
+
+  const handleLogout = async () => {
+    const res = await logout();
+
+    if (res.data) {
+      localStorage.removeItem("access_token");
+
+      setAuthenticated(false);
+      setUser({
+        avatar: "",
+        email: "",
+        fullName: "",
+        id: "",
+        phone: "",
+        role: "",
+      });
+
+      message.success("Logout successful!");
+    }
+  };
 
   const userMenuItems: MenuProps["items"] = [
     ...(user.role === "ADMIN"
@@ -31,7 +54,11 @@ const AppHeader = () => {
     },
     {
       key: "logout",
-      label: <Link to="/logout">Logout</Link>,
+      label: (
+        <div style={{ width: "100%" }} onClick={handleLogout}>
+          Logout
+        </div>
+      ),
       danger: true,
     },
     {

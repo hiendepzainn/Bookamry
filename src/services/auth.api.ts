@@ -25,4 +25,9 @@ const fetchAccount = () => {
   });
 };
 
-export { register, login, fetchAccount };
+const logout = () => {
+  const url = "/api/v1/auth/logout";
+  return instance1.post<unknown, IBackendResponse<string>>(url);
+};
+
+export { register, login, fetchAccount, logout };

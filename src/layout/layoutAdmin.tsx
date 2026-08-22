@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { MyContext } from "../components/context/app.context";
-import { Link, Outlet, useLocation } from "react-router-dom";
-import { Avatar, Button, Dropdown, Layout, Menu } from "antd";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { App, Avatar, Button, Dropdown, Layout, Menu } from "antd";
 import type { MenuProps } from "antd";
 import {
   AppstoreOutlined,
@@ -11,6 +11,7 @@ import {
   MenuUnfoldOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { logout } from "@/services/auth.api";
 
 const { Header, Sider, Content } = Layout;
 
@@ -37,26 +38,10 @@ const siderItems = [
   },
 ];
 
-const adminMenuItems: MenuProps["items"] = [
-  {
-    key: "profile",
-    label: <Link to="/profile">Quản lý tài khoản</Link>,
-  },
-  {
-    key: "orders",
-    label: <Link to="/">Trang chủ</Link>,
-  },
-  {
-    type: "divider",
-  },
-  {
-    key: "logout",
-    label: <Link to="/logout">Đăng xuất</Link>,
-    danger: true,
-  },
-];
-
 const LayoutAdmin = () => {
+  const { message } = App.useApp();
+  const navigate = useNavigate();
+
   const location = useLocation();
   let defaultSelectedKey = "";
   switch (location.pathname) {
@@ -74,9 +59,55 @@ const LayoutAdmin = () => {
       break;
   }
 
-  const { user, authenticated } = useContext(MyContext);
+  const { user, authenticated, setAuthenticated, setUser } =
+    useContext(MyContext);
 
   const [collapsed, setCollapsed] = useState(false);
+
+  const handleLogout = async () => {
+    const res = await logout();
+
+    if (res.data) {
+      localStorage.removeItem("access_token");
+
+      setAuthenticated(false);
+      setUser({
+        avatar: "",
+        email: "",
+        fullName: "",
+        id: "",
+        phone: "",
+        role: "",
+      });
+
+      message.success("Logout successful!");
+
+      navigate("/");
+    }
+  };
+
+  const adminMenuItems: MenuProps["items"] = [
+    {
+      key: "profile",
+      label: <Link to="/profile">Quản lý tài khoản</Link>,
+    },
+    {
+      key: "orders",
+      label: <Link to="/">Trang chủ</Link>,
+    },
+    {
+      type: "divider",
+    },
+    {
+      key: "logout",
+      label: (
+        <div style={{ width: "100%" }} onClick={handleLogout}>
+          Đăng xuất
+        </div>
+      ),
+      danger: true,
+    },
+  ];
 
   return (
     <>
