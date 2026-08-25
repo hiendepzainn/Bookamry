@@ -1,6 +1,6 @@
 import { fetchAccount } from "@/services/auth.api";
-import { Spin } from "antd";
 import React, { createContext, useEffect, useState } from "react";
+import AppLoading from "../app.loading";
 
 interface IProps {
   children: React.ReactNode;
@@ -55,19 +55,7 @@ const AppContext = (props: IProps) => {
   return (
     <>
       {loadingApp === true ? (
-        <div
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            marginTop: "-50px",
-            marginLeft: "-50px",
-            width: "100px",
-            height: "100px",
-          }}
-        >
-          <Spin fullscreen={true} size="large" />
-        </div>
+        <AppLoading />
       ) : (
         <MyContext.Provider
           value={{

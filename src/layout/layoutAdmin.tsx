@@ -132,7 +132,7 @@ const LayoutAdmin = () => {
               defaultSelectedKeys={[defaultSelectedKey]}
             />
           </Sider>
-          <Layout>
+          <Layout style={{ height: "100vh" }}>
             <Header
               style={{
                 background: "#FFFFFF",
