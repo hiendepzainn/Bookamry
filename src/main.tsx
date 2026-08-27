@@ -8,16 +8,15 @@ import RegisterPage from "pages/register";
 import LayoutClient from "@/layout/layoutClient";
 import Homepage from "pages/homepage";
 import ErrorPage from "pages/error";
-import { App, ConfigProvider } from "antd";
+import { App } from "antd";
 import AppContext from "./components/context/app.context";
 import CheckoutPage from "./pages/checkout";
 import AuthenticationRoute from "./components/auth/authentication";
 import AuthorizationRoute from "./components/auth/authorization";
 import LayoutAdmin from "./layout/layoutAdmin";
 import BooksPageAdmin from "./pages/admin/books";
-import UsersPageAdmin from "./pages/admin/users";
+import UsersPageAdmin from "./pages/admin/users2";
 import HomepageAdmin from "./pages/admin/homepage";
-import enUS from "antd/locale/en_US";
 
 const router = createBrowserRouter([
   {
@@ -100,9 +99,7 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <App>
     <AppContext>
-      <ConfigProvider locale={enUS}>
-        <RouterProvider router={router} />
-      </ConfigProvider>
+      <RouterProvider router={router} />
     </AppContext>
   </App>,
 );

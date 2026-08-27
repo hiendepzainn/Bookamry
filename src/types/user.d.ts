@@ -8,8 +8,9 @@ declare global {
     avatar: string;
     isActive: boolean;
     type: string;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
   }
 
   interface IDataPaginate<T> {

@@ -114,8 +114,8 @@ const LayoutAdmin = () => {
       {!authenticated || (authenticated && user.role !== "ADMIN") ? (
         <Outlet />
       ) : (
-        <Layout>
-          <Sider style={{ height: "100vh" }} collapsed={collapsed}>
+        <Layout style={{ minHeight: "100vh" }}>
+          <Sider collapsed={collapsed}>
             <div
               style={{
                 textAlign: "center",
@@ -132,7 +132,7 @@ const LayoutAdmin = () => {
               defaultSelectedKeys={[defaultSelectedKey]}
             />
           </Sider>
-          <Layout style={{ height: "100vh" }}>
+          <Layout>
             <Header
               style={{
                 background: "#FFFFFF",
@@ -162,6 +162,7 @@ const LayoutAdmin = () => {
             </Header>
             <Content
               style={{
+                backgroundColor: "red",
                 margin: "24px 16px",
                 padding: 24,
                 background: "#FFFFFF",
