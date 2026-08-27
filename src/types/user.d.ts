@@ -22,6 +22,12 @@ declare global {
     };
     result: T[];
   }
+
+  interface IUserSearchField {
+    fullName: string;
+    email: string;
+    createdAt: string;
+  }
 }
 
 export {};

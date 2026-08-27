@@ -4,7 +4,7 @@ import { Pagination, Table } from "antd";
 import type { TableProps } from "antd";
 import { useEffect, useState } from "react";
 
-const UsersPageAdmin = () => {
+const UsersTable = () => {
   const [data, setData] = useState<IUserTable[]>([]);
   const [total, setTotal] = useState<number>(0);
   const [current, setCurrent] = useState<number>(1);
@@ -112,4 +112,4 @@ const UsersPageAdmin = () => {
   );
 };
 
-export default UsersPageAdmin;
+export default UsersTable;

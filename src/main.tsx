@@ -15,7 +15,7 @@ import AuthenticationRoute from "./components/auth/authentication";
 import AuthorizationRoute from "./components/auth/authorization";
 import LayoutAdmin from "./layout/layoutAdmin";
 import BooksPageAdmin from "./pages/admin/books";
-import UsersPageAdmin from "./pages/admin/users2";
+import UsersPageAdmin from "./pages/admin/userManaging/users";
 import HomepageAdmin from "./pages/admin/homepage";
 
 const router = createBrowserRouter([
