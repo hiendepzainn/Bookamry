@@ -1,6 +1,8 @@
+import { getUserPaginate } from "@/services/user.api";
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 import { Table } from "antd";
 import type { TableProps } from "antd";
+import { useEffect, useState } from "react";
 
 const columns: TableProps<IUserTable>["columns"] = [
   {
@@ -49,12 +51,33 @@ const columns: TableProps<IUserTable>["columns"] = [
   },
 ];
 
-const data: IUserTable[] = [];
-
 const UsersPageAdmin = () => {
+  const [data, setData] = useState<IUserTable[]>([]);
+
+  const [tableLoading, setTableLoading] = useState<boolean>(false);
+
+  const fetchUser = async () => {
+    setTableLoading(true);
+
+    const res = await getUserPaginate(1, 20);
+
+    if (res.data) {
+      setData(res.data.result);
+      setTableLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
   return (
     <>
-      <Table<IUserTable> columns={columns} dataSource={data} />
+      <Table<IUserTable>
+        columns={columns}
+        dataSource={data}
+        loading={tableLoading}
+      />
     </>
   );
 };
