@@ -1,16 +1,37 @@
-import { getUserPaginate } from "@/services/user.api";
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 import { Pagination, Table } from "antd";
 import type { TableProps } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-const UsersTable = () => {
-  const [data, setData] = useState<IUserTable[]>([]);
-  const [total, setTotal] = useState<number>(0);
-  const [current, setCurrent] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(5);
+interface IProps {
+  data: IUserTable[];
+  total: number;
+  tableLoading: boolean;
+  fetchUser: (
+    current: number,
+    pageSize: number,
+    fullName?: string,
+    email?: string,
+  ) => void;
+  pageSize: number;
+  setPageSize: (value: number) => void;
+  current: number;
+  setCurrent: (value: number) => void;
+  searchObject: IUserSearchField;
+}
 
-  const [tableLoading, setTableLoading] = useState<boolean>(false);
+const UsersTable = (props: IProps) => {
+  const {
+    data,
+    total,
+    tableLoading,
+    fetchUser,
+    pageSize,
+    setPageSize,
+    current,
+    setCurrent,
+    searchObject,
+  } = props;
 
   const columns: TableProps<IUserTable>["columns"] = [
     {
@@ -66,21 +87,14 @@ const UsersTable = () => {
   ];
 
   const changePagination = async (current: number, pageSize: number) => {
-    await fetchUser(current, pageSize);
+    await fetchUser(
+      current,
+      pageSize,
+      searchObject.fullName,
+      searchObject.email,
+    );
     setCurrent(current);
     setPageSize(pageSize);
-  };
-
-  const fetchUser = async (current: number, pageSize: number) => {
-    setTableLoading(true);
-
-    const res = await getUserPaginate(current, pageSize);
-
-    if (res.data) {
-      setTotal(res.data.meta.total);
-      setData(res.data.result);
-      setTableLoading(false);
-    }
   };
 
   useEffect(() => {

@@ -3,14 +3,56 @@ import type { FormProps } from "antd";
 
 const { RangePicker } = DatePicker;
 
-const UsersSearch = () => {
-  const onFinish: FormProps<IUserSearchField>["onFinish"] = (values) => {
-    console.log("Success:", values);
+interface IProps {
+  fetchUser: (
+    current: number,
+    pageSize: number,
+    fullName?: string,
+    email?: string,
+  ) => void;
+  pageSize: number;
+  setCurrent: (value: number) => void;
+  setSearchObject: (value: IUserSearchField) => void;
+}
+
+const UsersSearch = (props: IProps) => {
+  const [form] = Form.useForm();
+  const { fetchUser, pageSize, setCurrent, setSearchObject } = props;
+
+  const onFinish: FormProps<IUserSearchField>["onFinish"] = async (values) => {
+    const newQuery: IUserSearchField = {
+      fullName: values.fullName ? values.fullName : "",
+      email: values.email ? values.email : "",
+      createdAt: values.createdAt ? values.createdAt : "",
+    };
+
+    setSearchObject(newQuery);
+
+    await fetchUser(1, pageSize, newQuery.fullName, newQuery.email);
+    setCurrent(1);
+  };
+
+  const handleReset = () => {
+    //clear input
+    form.resetFields();
+
+    //setSearchObject
+    setSearchObject({
+      fullName: "",
+      email: "",
+      createdAt: "",
+    });
+
+    //fetchUser
+    fetchUser(1, pageSize);
+
+    //setCurrent=1
+    setCurrent(1);
   };
 
   return (
     <div>
-      <Form layout="vertical" onFinish={onFinish}>
+      <Form form={form} layout="vertical" onFinish={onFinish}>
         <Row gutter={24}>
           <Col span={8}>
             <Form.Item<IUserSearchField> name="fullName" label="Full Name">
@@ -34,7 +76,9 @@ const UsersSearch = () => {
         <Form.Item>
           <div style={{ display: "flex", justifyContent: "end" }}>
             <Space>
-              <Button htmlType="button">Reset</Button>
+              <Button htmlType="button" onClick={handleReset}>
+                Reset
+              </Button>
               <Button htmlType="submit" type="primary">
                 Search
               </Button>
