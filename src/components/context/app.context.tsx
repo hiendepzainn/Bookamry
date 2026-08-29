@@ -34,7 +34,7 @@ const AppContext = (props: IProps) => {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [loadingApp, setLoadingApp] = useState<boolean>(false);
 
-  const fetchUser = async () => {
+  const fetchDataUser = async () => {
     setLoadingApp(true);
 
     const res = await fetchAccount();
@@ -49,7 +49,7 @@ const AppContext = (props: IProps) => {
   };
 
   useEffect(() => {
-    fetchUser();
+    fetchDataUser();
   }, []);
 
   return (

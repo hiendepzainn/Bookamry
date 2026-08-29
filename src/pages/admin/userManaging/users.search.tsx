@@ -1,3 +1,4 @@
+import { getStringArrayDateRange } from "@/services/helpers";
 import { Button, Col, DatePicker, Form, Input, Row, Space } from "antd";
 import type { FormProps } from "antd";
 
@@ -9,6 +10,7 @@ interface IProps {
     pageSize: number,
     fullName?: string,
     email?: string,
+    createdAt?: string[],
   ) => void;
   pageSize: number;
   setCurrent: (value: number) => void;
@@ -23,12 +25,20 @@ const UsersSearch = (props: IProps) => {
     const newQuery: IUserSearchField = {
       fullName: values.fullName ? values.fullName : "",
       email: values.email ? values.email : "",
-      createdAt: values.createdAt ? values.createdAt : "",
+      createdAt: values.createdAt
+        ? getStringArrayDateRange(values.createdAt)
+        : [],
     };
 
     setSearchObject(newQuery);
 
-    await fetchUser(1, pageSize, newQuery.fullName, newQuery.email);
+    await fetchUser(
+      1,
+      pageSize,
+      newQuery.fullName,
+      newQuery.email,
+      newQuery.createdAt,
+    );
     setCurrent(1);
   };
 
@@ -40,7 +50,7 @@ const UsersSearch = (props: IProps) => {
     setSearchObject({
       fullName: "",
       email: "",
-      createdAt: "",
+      createdAt: [],
     });
 
     //fetchUser

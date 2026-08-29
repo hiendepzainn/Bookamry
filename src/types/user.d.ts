@@ -26,7 +26,7 @@ declare global {
   interface IUserSearchField {
     fullName: string;
     email: string;
-    createdAt: string;
+    createdAt: string[];
   }
 }
 

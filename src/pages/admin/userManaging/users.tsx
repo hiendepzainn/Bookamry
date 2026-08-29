@@ -12,7 +12,7 @@ const UsersPageAdmin = () => {
   const [searchObject, setSearchObject] = useState<IUserSearchField>({
     fullName: "",
     email: "",
-    createdAt: "",
+    createdAt: [],
   });
 
   const [tableLoading, setTableLoading] = useState<boolean>(false);
@@ -22,10 +22,17 @@ const UsersPageAdmin = () => {
     pageSize: number,
     fullName: string = "",
     email: string = "",
+    createdAt: string[] = [],
   ) => {
     setTableLoading(true);
 
-    const res = await getUserPaginate(current, pageSize, fullName, email);
+    const res = await getUserPaginate(
+      current,
+      pageSize,
+      fullName,
+      email,
+      createdAt,
+    );
 
     if (res.data) {
       setTotal(res.data.meta.total);

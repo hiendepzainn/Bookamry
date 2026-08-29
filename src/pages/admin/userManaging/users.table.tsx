@@ -12,6 +12,7 @@ interface IProps {
     pageSize: number,
     fullName?: string,
     email?: string,
+    createdAt?: string[],
   ) => void;
   pageSize: number;
   setPageSize: (value: number) => void;
@@ -92,6 +93,7 @@ const UsersTable = (props: IProps) => {
       pageSize,
       searchObject.fullName,
       searchObject.email,
+      searchObject.createdAt,
     );
     setCurrent(current);
     setPageSize(pageSize);
