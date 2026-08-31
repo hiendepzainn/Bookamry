@@ -28,6 +28,11 @@ declare global {
     email: string;
     createdAt: string[];
   }
+
+  interface ISort {
+    name: string;
+    type: string;
+  }
 }
 
 export {};

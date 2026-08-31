@@ -13,12 +13,15 @@ interface IProps {
     fullName?: string,
     email?: string,
     createdAt?: string[],
+    sort?: ISort,
   ) => void;
   pageSize: number;
   setPageSize: (value: number) => void;
   current: number;
   setCurrent: (value: number) => void;
   searchObject: IUserSearchField;
+  setSort: (value: ISort) => void;
+  sort: ISort;
 }
 
 const UsersTable = (props: IProps) => {
@@ -32,6 +35,8 @@ const UsersTable = (props: IProps) => {
     current,
     setCurrent,
     searchObject,
+    setSort,
+    sort,
   } = props;
 
   const columns: TableProps<IUserTable>["columns"] = [
@@ -54,11 +59,13 @@ const UsersTable = (props: IProps) => {
       title: "Full Name",
       dataIndex: "fullName",
       key: "fullName",
+      sorter: true,
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
+      sorter: true,
     },
     {
       title: "Created At",
@@ -69,6 +76,7 @@ const UsersTable = (props: IProps) => {
           <div>{new Intl.DateTimeFormat("en-GB").format(new Date(value))}</div>
         );
       },
+      sorter: true,
     },
     {
       title: "Action",
@@ -94,9 +102,47 @@ const UsersTable = (props: IProps) => {
       searchObject.fullName,
       searchObject.email,
       searchObject.createdAt,
+      sort,
     );
     setCurrent(current);
     setPageSize(pageSize);
+  };
+
+  const changeTable: TableProps<IUserTable>["onChange"] = async (
+    pagination,
+    filters,
+    sorter,
+  ) => {
+    if (Object.keys(sorter).length !== 0) {
+      if (!Array.isArray(sorter)) {
+        if (sorter.order && sorter.field && typeof sorter.field === "string") {
+          const newSort = { name: sorter.field, type: sorter.order };
+          setSort(newSort);
+          await fetchUser(
+            current,
+            pageSize,
+            searchObject.fullName,
+            searchObject.email,
+            searchObject.createdAt,
+            newSort,
+          );
+        } else {
+          const newSort = {
+            name: "",
+            type: "",
+          };
+          setSort(newSort);
+          await fetchUser(
+            current,
+            pageSize,
+            searchObject.fullName,
+            searchObject.email,
+            searchObject.createdAt,
+            newSort,
+          );
+        }
+      }
+    }
   };
 
   useEffect(() => {
@@ -112,6 +158,7 @@ const UsersTable = (props: IProps) => {
         loading={tableLoading}
         pagination={false}
         rowKey="_id"
+        onChange={changeTable}
       />
       <Pagination
         align="end"

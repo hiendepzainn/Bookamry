@@ -17,12 +17,18 @@ const UsersPageAdmin = () => {
 
   const [tableLoading, setTableLoading] = useState<boolean>(false);
 
+  const [sort, setSort] = useState<ISort>({
+    name: "",
+    type: "",
+  });
+
   const fetchUser = async (
     current: number,
     pageSize: number,
     fullName: string = "",
     email: string = "",
     createdAt: string[] = [],
+    sort: ISort = { name: "", type: "" },
   ) => {
     setTableLoading(true);
 
@@ -32,6 +38,7 @@ const UsersPageAdmin = () => {
       fullName,
       email,
       createdAt,
+      sort,
     );
 
     if (res.data) {
@@ -47,6 +54,7 @@ const UsersPageAdmin = () => {
         pageSize={pageSize}
         setCurrent={setCurrent}
         setSearchObject={setSearchObject}
+        sort={sort}
       />
       <UsersTable
         fetchUser={fetchUser}
@@ -58,6 +66,8 @@ const UsersPageAdmin = () => {
         current={current}
         setCurrent={setCurrent}
         searchObject={searchObject}
+        setSort={setSort}
+        sort={sort}
       />
     </>
   );

@@ -6,8 +6,9 @@ const getUserPaginate = (
   fullName: string = "",
   email: string = "",
   createdAt: string[] = [],
+  sort: ISort = { name: "", type: "" },
 ) => {
-  const url = `/api/v1/user?current=${current}&pageSize=${pageSize}${fullName == "" ? "" : `&fullName=/${fullName}/i`}${email == "" ? "" : `&email=/${email}/i`}${createdAt.length == 0 ? "" : `&createdAt>=${createdAt[0]}&createdAt<=${createdAt[1]}`}`;
+  const url = `/api/v1/user?current=${current}&pageSize=${pageSize}${fullName == "" ? "" : `&fullName=/${fullName}/i`}${email == "" ? "" : `&email=/${email}/i`}${createdAt.length == 0 ? "" : `&createdAt>=${createdAt[0]}&createdAt<=${createdAt[1]}`}${sort.name === "" ? `` : `&sort=${sort.type === "ascend" ? `` : `-`}${sort.name}`}`;
   return instance1.get<unknown, IBackendResponse<IDataPaginate<IUserTable>>>(
     url,
   );

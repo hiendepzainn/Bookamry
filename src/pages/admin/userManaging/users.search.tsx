@@ -11,15 +11,17 @@ interface IProps {
     fullName?: string,
     email?: string,
     createdAt?: string[],
+    sort?: ISort,
   ) => void;
   pageSize: number;
   setCurrent: (value: number) => void;
   setSearchObject: (value: IUserSearchField) => void;
+  sort: ISort;
 }
 
 const UsersSearch = (props: IProps) => {
   const [form] = Form.useForm();
-  const { fetchUser, pageSize, setCurrent, setSearchObject } = props;
+  const { fetchUser, pageSize, setCurrent, setSearchObject, sort } = props;
 
   const onFinish: FormProps<IUserSearchField>["onFinish"] = async (values) => {
     const newQuery: IUserSearchField = {
@@ -38,6 +40,7 @@ const UsersSearch = (props: IProps) => {
       newQuery.fullName,
       newQuery.email,
       newQuery.createdAt,
+      sort,
     );
     setCurrent(1);
   };
@@ -54,7 +57,7 @@ const UsersSearch = (props: IProps) => {
     });
 
     //fetchUser
-    fetchUser(1, pageSize);
+    fetchUser(1, pageSize, "", "", [], sort);
 
     //setCurrent=1
     setCurrent(1);
