@@ -6,4 +6,8 @@ const getStringArrayDateRange = (dateRange: string[]) => {
   return [startDate.toString(), endDate.toString()];
 };
 
-export { getStringArrayDateRange };
+const formatDate = (date: string) => {
+  return new Intl.DateTimeFormat("en-GB").format(new Date(date));
+};
+
+export { getStringArrayDateRange, formatDate };

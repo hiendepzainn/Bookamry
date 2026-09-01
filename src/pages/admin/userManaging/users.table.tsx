@@ -1,7 +1,9 @@
+import { formatDate } from "@/services/helpers";
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 import { Pagination, Table } from "antd";
 import type { TableProps } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import UsersDrawer from "./users.table.drawer";
 
 interface IProps {
   data: IUserTable[];
@@ -39,6 +41,21 @@ const UsersTable = (props: IProps) => {
     sort,
   } = props;
 
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [userDrawer, setUserDrawer] = useState<IUserTable>({
+    _id: "",
+    fullName: "",
+    email: "",
+    phone: "",
+    role: "",
+    avatar: "",
+    isActive: true,
+    type: "",
+    createdAt: "",
+    updatedAt: "",
+    __v: 0,
+  });
+
   const columns: TableProps<IUserTable>["columns"] = [
     {
       title: "",
@@ -51,8 +68,8 @@ const UsersTable = (props: IProps) => {
       title: "ID",
       dataIndex: "_id",
       key: "id",
-      render: (value) => {
-        return <a>{value}</a>;
+      render: (value, record) => {
+        return <a onClick={() => openDrawer(record)}>{value}</a>;
       },
     },
     {
@@ -72,9 +89,7 @@ const UsersTable = (props: IProps) => {
       dataIndex: "createdAt",
       key: "createdAt",
       render: (value) => {
-        return (
-          <div>{new Intl.DateTimeFormat("en-GB").format(new Date(value))}</div>
-        );
+        return <div>{formatDate(value)}</div>;
       },
       sorter: true,
     },
@@ -145,6 +160,13 @@ const UsersTable = (props: IProps) => {
     }
   };
 
+  const openDrawer = (user: IUserTable) => {
+    //open drawer
+    setIsDrawerOpen(true);
+    //set data
+    setUserDrawer(user);
+  };
+
   useEffect(() => {
     fetchUser(current, pageSize);
   }, []);
@@ -170,6 +192,11 @@ const UsersTable = (props: IProps) => {
         }
         showSizeChanger={true}
         onChange={changePagination}
+      />
+      <UsersDrawer
+        isDrawerOpen={isDrawerOpen}
+        setIsDrawerOpen={setIsDrawerOpen}
+        userDrawer={userDrawer}
       />
     </>
   );
