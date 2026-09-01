@@ -1,5 +1,5 @@
 import { formatDate } from "@/services/helpers";
-import { Badge, Descriptions, Drawer } from "antd";
+import { Avatar, Badge, Descriptions, Drawer } from "antd";
 import type { DescriptionsProps } from "antd";
 
 interface IProps {
@@ -36,7 +36,16 @@ const UsersDrawer = (props: IProps) => {
       key: "role",
       label: "Role",
       children: <Badge status="processing" text={userDrawer.role} />,
-      span: 2,
+    },
+    {
+      key: "avatar",
+      label: "Avatar",
+      children: (
+        <Avatar
+          size="large"
+          src={`${import.meta.env.VITE_BACKEND_URL}/images/avatar/${userDrawer.avatar}`}
+        />
+      ),
     },
     {
       key: "createdAt",
