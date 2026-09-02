@@ -18,8 +18,8 @@ const UsersPageAdmin = () => {
   const [tableLoading, setTableLoading] = useState<boolean>(false);
 
   const [sort, setSort] = useState<ISort>({
-    name: "",
-    type: "",
+    name: "createdAt",
+    type: "descend",
   });
 
   const fetchUser = async (

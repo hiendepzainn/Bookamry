@@ -168,7 +168,14 @@ const UsersTable = (props: IProps) => {
   };
 
   useEffect(() => {
-    fetchUser(current, pageSize);
+    fetchUser(
+      current,
+      pageSize,
+      searchObject.fullName,
+      searchObject.email,
+      searchObject.createdAt,
+      sort,
+    );
   }, []);
 
   return (

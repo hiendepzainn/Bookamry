@@ -1,6 +1,7 @@
 import { getStringArrayDateRange } from "@/services/helpers";
 import { Button, Col, DatePicker, Form, Input, Row, Space } from "antd";
 import type { FormProps } from "antd";
+import UsersModal from "./users.search.modal";
 
 const { RangePicker } = DatePicker;
 
@@ -64,7 +65,7 @@ const UsersSearch = (props: IProps) => {
   };
 
   return (
-    <div>
+    <>
       <Form form={form} layout="vertical" onFinish={onFinish}>
         <Row gutter={24}>
           <Col span={8}>
@@ -87,7 +88,8 @@ const UsersSearch = (props: IProps) => {
         </Row>
 
         <Form.Item>
-          <div style={{ display: "flex", justifyContent: "end" }}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Button type="primary">+ Add new</Button>
             <Space>
               <Button htmlType="button" onClick={handleReset}>
                 Reset
@@ -99,7 +101,8 @@ const UsersSearch = (props: IProps) => {
           </div>
         </Form.Item>
       </Form>
-    </div>
+      <UsersModal />
+    </>
   );
 };
 
