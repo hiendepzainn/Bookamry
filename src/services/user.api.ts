@@ -14,4 +14,9 @@ const getUserPaginate = (
   );
 };
 
-export { getUserPaginate };
+const createNewUser = (data: IFieldRegister) => {
+  const url = "/api/v1/user";
+  return instance1.post<unknown, IBackendResponse<IUserTable>>(url, data);
+};
+
+export { getUserPaginate, createNewUser };

@@ -1,22 +1,80 @@
-import { Divider, Form, Input, Modal } from "antd";
+import { createNewUser } from "@/services/user.api";
+import { App, Divider, Form, Input, Modal } from "antd";
+import type { FormProps } from "antd";
 
-const UsersModal = () => {
+interface IProps {
+  isModalOpen: boolean;
+  setIsModalOpen: (value: boolean) => void;
+  fetchUser: (
+    current: number,
+    pageSize: number,
+    fullName?: string,
+    email?: string,
+    createdAt?: string[],
+    sort?: ISort,
+  ) => void;
+  pageSize: number;
+  sort: ISort;
+  current: number;
+  searchObject: IUserSearchField;
+}
+
+const UsersModal = (props: IProps) => {
+  const {
+    isModalOpen,
+    setIsModalOpen,
+    fetchUser,
+    current,
+    pageSize,
+    searchObject,
+    sort,
+  } = props;
   const [form] = Form.useForm();
+  const { notification } = App.useApp();
+
+  const onFinish: FormProps<IFieldRegister>["onFinish"] = async (values) => {
+    console.log("Success:", values);
+    const res = await createNewUser(values);
+
+    if (res.data) {
+      // reset modal
+      form.resetFields();
+
+      // close modal
+      setIsModalOpen(false);
+
+      // display message
+      notification.success({ message: "Create Successful!" });
+
+      // fetchUser
+      fetchUser(
+        current,
+        pageSize,
+        searchObject.fullName,
+        searchObject.email,
+        searchObject.createdAt,
+        sort,
+      );
+    } else {
+      //display message
+      notification.success({ message: res.message });
+    }
+  };
 
   return (
     <Modal
       title="Thêm mới người dùng"
       closable={{ "aria-label": "Custom Close Button" }}
-      open={true}
+      open={isModalOpen}
       onOk={() => {
         form.submit();
       }}
-      // onCancel={handleCancel}
+      onCancel={() => setIsModalOpen(false)}
       okText="Tạo mới"
       cancelText="Hủy"
     >
       <Divider />
-      <Form layout="vertical" form={form}>
+      <Form layout="vertical" form={form} onFinish={onFinish}>
         <Form.Item<IFieldRegister>
           label="Tên hiển thị"
           name="fullName"

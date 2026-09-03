@@ -55,6 +55,8 @@ const UsersPageAdmin = () => {
         setCurrent={setCurrent}
         setSearchObject={setSearchObject}
         sort={sort}
+        current={current}
+        searchObject={searchObject}
       />
       <UsersTable
         fetchUser={fetchUser}

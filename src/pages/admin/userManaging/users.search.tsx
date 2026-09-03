@@ -2,6 +2,7 @@ import { getStringArrayDateRange } from "@/services/helpers";
 import { Button, Col, DatePicker, Form, Input, Row, Space } from "antd";
 import type { FormProps } from "antd";
 import UsersModal from "./users.search.modal";
+import { useState } from "react";
 
 const { RangePicker } = DatePicker;
 
@@ -18,11 +19,23 @@ interface IProps {
   setCurrent: (value: number) => void;
   setSearchObject: (value: IUserSearchField) => void;
   sort: ISort;
+  current: number;
+  searchObject: IUserSearchField;
 }
 
 const UsersSearch = (props: IProps) => {
   const [form] = Form.useForm();
-  const { fetchUser, pageSize, setCurrent, setSearchObject, sort } = props;
+  const {
+    fetchUser,
+    pageSize,
+    setCurrent,
+    setSearchObject,
+    sort,
+    current,
+    searchObject,
+  } = props;
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const onFinish: FormProps<IUserSearchField>["onFinish"] = async (values) => {
     const newQuery: IUserSearchField = {
@@ -89,7 +102,9 @@ const UsersSearch = (props: IProps) => {
 
         <Form.Item>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Button type="primary">+ Add new</Button>
+            <Button type="primary" onClick={() => setIsModalOpen(true)}>
+              + Add new
+            </Button>
             <Space>
               <Button htmlType="button" onClick={handleReset}>
                 Reset
@@ -101,7 +116,15 @@ const UsersSearch = (props: IProps) => {
           </div>
         </Form.Item>
       </Form>
-      <UsersModal />
+      <UsersModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        fetchUser={fetchUser}
+        pageSize={pageSize}
+        sort={sort}
+        current={current}
+        searchObject={searchObject}
+      />
     </>
   );
 };
