@@ -1,9 +1,15 @@
 import { formatDate } from "@/services/helpers";
-import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
-import { Pagination, Table } from "antd";
+import {
+  DeleteTwoTone,
+  EditTwoTone,
+  ExportOutlined,
+  ImportOutlined,
+} from "@ant-design/icons";
+import { Button, Pagination, Space, Table } from "antd";
 import type { TableProps } from "antd";
 import { useEffect, useState } from "react";
 import UsersDrawer from "./users.table.drawer";
+import ImportModal from "./users.table.modal";
 
 interface IProps {
   data: IUserTable[];
@@ -55,6 +61,8 @@ const UsersTable = (props: IProps) => {
     updatedAt: "",
     __v: 0,
   });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const columns: TableProps<IUserTable>["columns"] = [
     {
@@ -180,6 +188,26 @@ const UsersTable = (props: IProps) => {
 
   return (
     <>
+      <div style={{ marginBottom: "15px" }}>
+        <Space>
+          <Button type="primary">
+            <ExportOutlined />
+            <span>Export</span>
+          </Button>
+
+          <Button
+            type="primary"
+            onClick={() => {
+              //open Import modal
+              setIsModalOpen(true);
+            }}
+          >
+            <ImportOutlined />
+            <span>Import</span>
+          </Button>
+        </Space>
+      </div>
+
       <Table<IUserTable>
         style={{ marginBottom: "10px" }}
         columns={columns}
@@ -189,6 +217,7 @@ const UsersTable = (props: IProps) => {
         rowKey="_id"
         onChange={changeTable}
       />
+
       <Pagination
         align="end"
         current={current}
@@ -200,11 +229,14 @@ const UsersTable = (props: IProps) => {
         showSizeChanger={true}
         onChange={changePagination}
       />
+
       <UsersDrawer
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
         userDrawer={userDrawer}
       />
+
+      <ImportModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
     </>
   );
 };

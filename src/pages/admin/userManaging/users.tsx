@@ -1,6 +1,6 @@
 import { useState } from "react";
-import UsersSearch from "./users.search";
-import UsersTable from "./users.table";
+import UsersSearch from "./search/users.search";
+import UsersTable from "./table/users.table";
 import { getUserPaginate } from "@/services/user.api";
 
 const UsersPageAdmin = () => {
