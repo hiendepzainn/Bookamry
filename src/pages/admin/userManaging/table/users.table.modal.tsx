@@ -42,6 +42,7 @@ const ImportModal = (props: IProps) => {
   } = props;
 
   const [data, setData] = useState<IUserImport[]>([]);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const columns: TableProps<IUserImport>["columns"] = [
     {
@@ -68,9 +69,12 @@ const ImportModal = (props: IProps) => {
     //check valid .xlsx
     if (info.file.type !== validMimeType) {
       message.error("File tải lên không hợp lệ!");
+      setFileList([]);
       setData([]);
       return;
     }
+
+    setFileList(info.fileList);
 
     const file = (info.file.originFileObj || info.file) as Blob;
     const reader = new FileReader();
@@ -93,6 +97,7 @@ const ImportModal = (props: IProps) => {
           )
         ) {
           message.error("Format trong file .xlsx chưa chuẩn");
+          setFileList([]);
           setData([]);
           return;
         }
@@ -157,6 +162,10 @@ const ImportModal = (props: IProps) => {
       );
 
       setSort({ name: "createdAt", type: "descend" });
+
+      //clear data MODAL
+      setData([]);
+      setFileList([]);
     }
   };
 
@@ -176,6 +185,7 @@ const ImportModal = (props: IProps) => {
         <Dragger
           multiple={false}
           maxCount={1} //max 1 file
+          fileList={fileList}
           onChange={changeDragger}
           //no automatically send request (Dragger)
           beforeUpload={() => false}
