@@ -33,6 +33,13 @@ declare global {
     name: string;
     type: string;
   }
+
+  interface IUserImport {
+    fullName: string;
+    password: string;
+    email: string;
+    phone: string;
+  }
 }
 
 export {};
