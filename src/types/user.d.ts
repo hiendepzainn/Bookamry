@@ -40,6 +40,12 @@ declare global {
     email: string;
     phone: string;
   }
+
+  interface IDataImportResponse {
+    countSuccess: number;
+    countError: number;
+    detail: string;
+  }
 }
 
 export {};

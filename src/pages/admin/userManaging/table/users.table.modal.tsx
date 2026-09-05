@@ -1,20 +1,45 @@
-import { InboxOutlined } from "@ant-design/icons";
+import {
+  CheckCircleTwoTone,
+  CloseCircleTwoTone,
+  InboxOutlined,
+} from "@ant-design/icons";
 import { App, Modal, Table, Upload } from "antd";
 import type { TableProps, UploadFile } from "antd";
 import { UploadChangeParam } from "antd/es/upload";
 import { useState } from "react";
 import ExcelJS from "exceljs";
+import { importUsers } from "@/services/user.api";
 
 const { Dragger } = Upload;
 
 interface IProps {
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
+  current: number;
+  pageSize: number;
+  searchObject: IUserSearchField;
+  setSort: (value: ISort) => void;
+  fetchUser: (
+    current: number,
+    pageSize: number,
+    fullName?: string,
+    email?: string,
+    createdAt?: string[],
+    sort?: ISort,
+  ) => void;
 }
 
 const ImportModal = (props: IProps) => {
-  const { message } = App.useApp();
-  const { isModalOpen, setIsModalOpen } = props;
+  const { message, notification } = App.useApp();
+  const {
+    isModalOpen,
+    setIsModalOpen,
+    current,
+    pageSize,
+    searchObject,
+    setSort,
+    fetchUser,
+  } = props;
 
   const [data, setData] = useState<IUserImport[]>([]);
 
@@ -96,6 +121,45 @@ const ImportModal = (props: IProps) => {
     }
   };
 
+  const handleImport = async () => {
+    //call API
+    const res = await importUsers(data);
+
+    if (res.data) {
+      //display message
+      notification.open({
+        message: <h3>Import Users</h3>,
+        description: (
+          <>
+            <div>
+              <CheckCircleTwoTone twoToneColor="#23e03c" />
+              <span> Success: {res.data.countSuccess}</span>
+            </div>
+            <div>
+              <CloseCircleTwoTone twoToneColor="#e42a2a" />
+              <span> Failed: {res.data.countError}</span>
+            </div>
+          </>
+        ),
+      });
+
+      //close modal
+      setIsModalOpen(false);
+
+      //reload table
+      await fetchUser(
+        current,
+        pageSize,
+        searchObject.fullName,
+        searchObject.email,
+        searchObject.createdAt,
+        { name: "createdAt", type: "descend" },
+      );
+
+      setSort({ name: "createdAt", type: "descend" });
+    }
+  };
+
   return (
     <>
       <Modal
@@ -105,7 +169,7 @@ const ImportModal = (props: IProps) => {
           disabled: data.length === 0 ? true : false,
         }}
         open={isModalOpen}
-        onOk={() => setIsModalOpen(false)}
+        onOk={handleImport}
         onCancel={() => setIsModalOpen(false)}
         width="55vw"
       >

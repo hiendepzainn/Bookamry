@@ -19,4 +19,12 @@ const createNewUser = (data: IFieldRegister) => {
   return instance1.post<unknown, IBackendResponse<IUserTable>>(url, data);
 };
 
-export { getUserPaginate, createNewUser };
+const importUsers = (data: IUserImport[]) => {
+  const url = "/api/v1/user/bulk-create";
+  return instance1.post<unknown, IBackendResponse<IDataImportResponse>>(
+    url,
+    data,
+  );
+};
+
+export { getUserPaginate, createNewUser, importUsers };

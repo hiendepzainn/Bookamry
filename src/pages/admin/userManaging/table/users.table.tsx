@@ -236,7 +236,15 @@ const UsersTable = (props: IProps) => {
         userDrawer={userDrawer}
       />
 
-      <ImportModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+      <ImportModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        current={current}
+        pageSize={pageSize}
+        searchObject={searchObject}
+        setSort={setSort}
+        fetchUser={fetchUser}
+      />
     </>
   );
 };
