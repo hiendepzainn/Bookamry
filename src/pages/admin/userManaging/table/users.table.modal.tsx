@@ -9,6 +9,7 @@ import { UploadChangeParam } from "antd/es/upload";
 import { useState } from "react";
 import ExcelJS from "exceljs";
 import { importUsers } from "@/services/user.api";
+import sampleFile from "assets/excel/sample.xlsx?url";
 
 const { Dragger } = Upload;
 
@@ -198,6 +199,16 @@ const ImportModal = (props: IProps) => {
           </p>
           <p className="ant-upload-hint">
             Support for a single upload. Only accept .xlsx
+          </p>
+          <p>
+            Download sample Import File{" "}
+            <a
+              onClick={(e) => e.stopPropagation()}
+              href={sampleFile}
+              download="sampleImport.xlsx"
+            >
+              here
+            </a>
           </p>
         </Dragger>
 
