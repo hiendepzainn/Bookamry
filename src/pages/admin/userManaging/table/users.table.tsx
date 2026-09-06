@@ -10,6 +10,7 @@ import type { TableProps } from "antd";
 import { useEffect, useState } from "react";
 import UsersDrawer from "./users.table.drawer";
 import ImportModal from "./users.table.modal";
+import { CSVLink } from "react-csv";
 
 interface IProps {
   data: IUserTable[];
@@ -190,10 +191,12 @@ const UsersTable = (props: IProps) => {
     <>
       <div style={{ marginBottom: "15px" }}>
         <Space>
-          <Button type="primary">
-            <ExportOutlined />
-            <span>Export</span>
-          </Button>
+          <CSVLink data={data} filename="data.csv">
+            <Button type="primary">
+              <ExportOutlined />
+              <span> Export</span>
+            </Button>
+          </CSVLink>
 
           <Button
             type="primary"
