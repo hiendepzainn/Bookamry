@@ -5,13 +5,14 @@ import {
   ExportOutlined,
   ImportOutlined,
 } from "@ant-design/icons";
-import { Button, Pagination, Space, Table } from "antd";
+import { App, Button, Pagination, Popconfirm, Space, Table } from "antd";
 import type { TableProps } from "antd";
 import { useEffect, useState } from "react";
 import UsersDrawer from "./users.table.drawer";
 import ImportModal from "./users.table.modal.import";
 import { CSVLink } from "react-csv";
 import UpdateModal from "./users.table.modal.update";
+import { deleteUser } from "@/services/user.api";
 
 interface IProps {
   data: IUserTable[];
@@ -48,6 +49,8 @@ const UsersTable = (props: IProps) => {
     setSort,
     sort,
   } = props;
+
+  const { message } = App.useApp();
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [userDrawer, setUserDrawer] = useState<IUserTable>({
@@ -129,7 +132,16 @@ const UsersTable = (props: IProps) => {
               twoToneColor="#ff6421"
               onClick={() => clickEditIcon(record)}
             />
-            <DeleteTwoTone twoToneColor="#f71a1a" />
+            <Popconfirm
+              placement="left"
+              title="Delete User"
+              description="Are you sure to delete this User?"
+              onConfirm={() => handleDelete(record._id)}
+              okText="Delete"
+              cancelText="Cancel"
+            >
+              <DeleteTwoTone twoToneColor="#f71a1a" />
+            </Popconfirm>
           </div>
         );
       },
@@ -196,6 +208,27 @@ const UsersTable = (props: IProps) => {
   const clickEditIcon = (record: IUserTable) => {
     setIsUpdateModalOpen(true);
     setUpdateData(record);
+  };
+
+  const handleDelete = async (id: string) => {
+    const res = await deleteUser(id);
+    if (res.data) {
+      //message
+      message.success("Delete successful!");
+
+      //fetch
+      fetchUser(
+        current,
+        pageSize,
+        searchObject.fullName,
+        searchObject.email,
+        searchObject.createdAt,
+        sort,
+      );
+    } else {
+      //message
+      message.error("Có lỗi xảy ra!");
+    }
   };
 
   useEffect(() => {

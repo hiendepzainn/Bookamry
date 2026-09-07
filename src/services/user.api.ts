@@ -37,4 +37,9 @@ const updateUser = (data: IFieldUpdate) => {
   return instance1.put<unknown, IBackendResponse<string>>(url, dataUpdate);
 };
 
-export { getUserPaginate, createNewUser, importUsers, updateUser };
+const deleteUser = (id: string) => {
+  const url = `/api/v1/user/${id}`;
+  return instance1.delete<unknown, IBackendResponse<string>>(url);
+};
+
+export { getUserPaginate, createNewUser, importUsers, updateUser, deleteUser };
