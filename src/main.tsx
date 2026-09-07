@@ -14,7 +14,7 @@ import CheckoutPage from "./pages/checkout";
 import AuthenticationRoute from "./components/auth/authentication";
 import AuthorizationRoute from "./components/auth/authorization";
 import LayoutAdmin from "./layout/layoutAdmin";
-import BooksPageAdmin from "./pages/admin/books";
+import BooksPageAdmin from "./pages/admin/bookManaging/books";
 import UsersPageAdmin from "./pages/admin/userManaging/users";
 import HomepageAdmin from "./pages/admin/homepage";
 
