@@ -1,12 +1,18 @@
 import { getBooksPaginate } from "@/services/book.api";
 import { formatDate, formatPrice } from "@/services/helpers";
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
-import { Table } from "antd";
+import { Pagination, Table } from "antd";
 import type { TableProps } from "antd";
 import { useEffect, useState } from "react";
 
 const BookTable = () => {
   const [data, setData] = useState<IBookTable[]>([]);
+  const [total, setTotal] = useState(0);
+  const [current, setCurrent] = useState(1);
+  const [pageSize, setPageSize] = useState(4);
+
+  const [isLoadingTable, setIsLoadingTable] = useState(false);
+
   const columns: TableProps<IBookTable>["columns"] = [
     {
       title: "ID",
@@ -46,6 +52,7 @@ const BookTable = () => {
       render: (value) => {
         return <div>{formatDate(value)}</div>;
       },
+      width: "12%",
     },
     {
       title: "Action",
@@ -64,20 +71,47 @@ const BookTable = () => {
     },
   ];
 
-  const fetchBooks = async () => {
-    const res = await getBooksPaginate();
+  const fetchBooks = async (current: number, pageSize: number) => {
+    setIsLoadingTable(true);
+    const res = await getBooksPaginate(current, pageSize);
     if (res.data) {
       setData(res.data.result);
+      setTotal(res.data.meta.total);
+      setIsLoadingTable(false);
     }
   };
 
+  const changePagination = async (page: number, pageSize: number) => {
+    setCurrent(page);
+    setPageSize(pageSize);
+    await fetchBooks(page, pageSize);
+  };
+
   useEffect(() => {
-    fetchBooks();
+    fetchBooks(current, pageSize);
   }, []);
 
   return (
     <>
-      <Table columns={columns} dataSource={data} />
+      <Table
+        columns={columns}
+        dataSource={data}
+        pagination={false}
+        rowKey="_id"
+        loading={isLoadingTable}
+      />
+      <Pagination
+        style={{ marginTop: "15px" }}
+        align="end"
+        total={total}
+        showTotal={(total, range) =>
+          `${range[0]}-${range[1]} of ${total} items`
+        }
+        current={current}
+        pageSize={pageSize}
+        showSizeChanger={true}
+        onChange={changePagination}
+      />
     </>
   );
 };
