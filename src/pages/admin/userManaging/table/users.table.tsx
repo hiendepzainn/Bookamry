@@ -9,8 +9,9 @@ import { Button, Pagination, Space, Table } from "antd";
 import type { TableProps } from "antd";
 import { useEffect, useState } from "react";
 import UsersDrawer from "./users.table.drawer";
-import ImportModal from "./users.table.modal";
+import ImportModal from "./users.table.modal.import";
 import { CSVLink } from "react-csv";
+import UpdateModal from "./users.table.modal.update";
 
 interface IProps {
   data: IUserTable[];
@@ -65,6 +66,21 @@ const UsersTable = (props: IProps) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [updateData, setUpdateData] = useState<IUserTable>({
+    _id: "",
+    fullName: "",
+    email: "",
+    phone: "",
+    role: "",
+    avatar: "",
+    isActive: true,
+    type: "",
+    createdAt: "",
+    updatedAt: "",
+    __v: 0,
+  });
+
   const columns: TableProps<IUserTable>["columns"] = [
     {
       title: "",
@@ -105,12 +121,13 @@ const UsersTable = (props: IProps) => {
     {
       title: "Action",
       key: "action",
-      render: () => {
+      render: (value, record) => {
         return (
           <div>
             <EditTwoTone
               style={{ marginRight: "10px" }}
               twoToneColor="#ff6421"
+              onClick={() => clickEditIcon(record)}
             />
             <DeleteTwoTone twoToneColor="#f71a1a" />
           </div>
@@ -174,6 +191,11 @@ const UsersTable = (props: IProps) => {
     setIsDrawerOpen(true);
     //set data
     setUserDrawer(user);
+  };
+
+  const clickEditIcon = (record: IUserTable) => {
+    setIsUpdateModalOpen(true);
+    setUpdateData(record);
   };
 
   useEffect(() => {
@@ -247,6 +269,18 @@ const UsersTable = (props: IProps) => {
         searchObject={searchObject}
         setSort={setSort}
         fetchUser={fetchUser}
+      />
+
+      <UpdateModal
+        isUpdateModalOpen={isUpdateModalOpen}
+        setIsUpdateModalOpen={setIsUpdateModalOpen}
+        updateData={updateData}
+        current={current}
+        pageSize={pageSize}
+        searchObject={searchObject}
+        sort={sort}
+        fetchUser={fetchUser}
+        setUpdateData={setUpdateData}
       />
     </>
   );

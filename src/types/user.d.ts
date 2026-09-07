@@ -46,6 +46,13 @@ declare global {
     countError: number;
     detail: string;
   }
+
+  interface IFieldUpdate {
+    id: string;
+    email: string;
+    fullName: string;
+    phone: string;
+  }
 }
 
 export {};

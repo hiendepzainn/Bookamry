@@ -27,4 +27,14 @@ const importUsers = (data: IUserImport[]) => {
   );
 };
 
-export { getUserPaginate, createNewUser, importUsers };
+const updateUser = (data: IFieldUpdate) => {
+  const url = "/api/v1/user";
+  const dataUpdate = {
+    _id: data.id,
+    fullName: data.fullName,
+    phone: data.phone,
+  };
+  return instance1.put<unknown, IBackendResponse<string>>(url, dataUpdate);
+};
+
+export { getUserPaginate, createNewUser, importUsers, updateUser };
