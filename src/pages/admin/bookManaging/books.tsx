@@ -13,6 +13,7 @@ const BooksPageAdmin = () => {
     mainText: "",
     author: "",
   });
+  const [sort, setSort] = useState<ISort>({ name: "", type: "" });
 
   const [isLoadingTable, setIsLoadingTable] = useState(false);
 
@@ -21,9 +22,16 @@ const BooksPageAdmin = () => {
     pageSize: number,
     mainText: string,
     author: string,
+    sort: ISort,
   ) => {
     setIsLoadingTable(true);
-    const res = await getBooksPaginate(current, pageSize, mainText, author);
+    const res = await getBooksPaginate(
+      current,
+      pageSize,
+      mainText,
+      author,
+      sort,
+    );
     if (res.data) {
       setData(res.data.result);
       setTotal(res.data.meta.total);
@@ -38,6 +46,7 @@ const BooksPageAdmin = () => {
         fetchBooks={fetchBooks}
         pageSize={pageSize}
         setCurrent={setCurrent}
+        sort={sort}
       />
       <BookTable
         searchObject={searchObject}
@@ -49,6 +58,8 @@ const BooksPageAdmin = () => {
         setCurrent={setCurrent}
         pageSize={pageSize}
         setPageSize={setPageSize}
+        setSort={setSort}
+        sort={sort}
       />
     </>
   );

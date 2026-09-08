@@ -8,24 +8,38 @@ interface IProps {
     pageSize: number,
     mainText: string,
     author: string,
+    sort: ISort,
   ) => void;
 
   pageSize: number;
   setCurrent: (value: number) => void;
+  sort: ISort;
 }
 
 const BookSearch = (props: IProps) => {
-  const { searchObject, setSearchObject, fetchBooks, pageSize, setCurrent } =
-    props;
+  const {
+    searchObject,
+    setSearchObject,
+    fetchBooks,
+    pageSize,
+    setCurrent,
+    sort,
+  } = props;
 
   const handleSearch = async () => {
     //fetch books
-    await fetchBooks(1, pageSize, searchObject.mainText, searchObject.author);
+    await fetchBooks(
+      1,
+      pageSize,
+      searchObject.mainText,
+      searchObject.author,
+      sort,
+    );
     setCurrent(1);
   };
 
   const handleReset = async () => {
-    await fetchBooks(1, pageSize, "", "");
+    await fetchBooks(1, pageSize, "", "", sort);
     setCurrent(1);
     setSearchObject({ author: "", mainText: "" });
   };

@@ -14,11 +14,14 @@ interface IProps {
     pageSize: number,
     mainText: string,
     author: string,
+    sort: ISort,
   ) => void;
   current: number;
   setCurrent: (value: number) => void;
   pageSize: number;
   setPageSize: (value: number) => void;
+  setSort: (value: ISort) => void;
+  sort: ISort;
 }
 
 const BookTable = (props: IProps) => {
@@ -32,6 +35,8 @@ const BookTable = (props: IProps) => {
     setCurrent,
     pageSize,
     setPageSize,
+    setSort,
+    sort,
   } = props;
 
   const columns: TableProps<IBookTable>["columns"] = [
@@ -47,17 +52,21 @@ const BookTable = (props: IProps) => {
       title: "Tên sách",
       dataIndex: "mainText",
       key: "mainText",
+      sorter: true,
     },
     {
       title: "Thể loại",
       dataIndex: "category",
       key: "category",
+      sorter: true,
+      width: "10%",
     },
     {
       title: "Tác giả",
       dataIndex: "author",
       key: "author",
       width: "20%",
+      sorter: true,
     },
     {
       title: "Giá tiền",
@@ -65,6 +74,7 @@ const BookTable = (props: IProps) => {
       key: "price",
       render: (value) => formatPrice(value),
       width: "9%",
+      sorter: true,
     },
     {
       title: "Ngày cập nhật",
@@ -73,7 +83,8 @@ const BookTable = (props: IProps) => {
       render: (value) => {
         return <div>{formatDate(value)}</div>;
       },
-      width: "12%",
+      width: "13%",
+      sorter: true,
     },
     {
       title: "Action",
@@ -100,11 +111,62 @@ const BookTable = (props: IProps) => {
       pageSize,
       searchObject.mainText,
       searchObject.author,
+      sort,
     );
   };
 
+  const changeTable: TableProps<IBookTable>["onChange"] = (
+    pagination,
+    filters,
+    sorter,
+  ) => {
+    //check empty object
+    if (Object.keys(sorter).length !== 0) {
+      //check is not Array
+      if (!Array.isArray(sorter)) {
+        const newSort: ISort = { name: "", type: "" };
+
+        switch (sorter.order) {
+          case "ascend":
+            if (typeof sorter.field === "string") {
+              newSort.name = sorter.field;
+              newSort.type = sorter.order;
+            }
+            break;
+
+          case "descend":
+            if (typeof sorter.field === "string") {
+              newSort.name = sorter.field;
+              newSort.type = sorter.order;
+            }
+            break;
+
+          default:
+            break;
+        }
+
+        setSort(newSort);
+
+        //fetchBooks
+        fetchBooks(
+          current,
+          pageSize,
+          searchObject.mainText,
+          searchObject.author,
+          newSort,
+        );
+      }
+    }
+  };
+
   useEffect(() => {
-    fetchBooks(current, pageSize, searchObject.mainText, searchObject.author);
+    fetchBooks(
+      current,
+      pageSize,
+      searchObject.mainText,
+      searchObject.author,
+      sort,
+    );
   }, []);
 
   return (
@@ -115,6 +177,7 @@ const BookTable = (props: IProps) => {
         pagination={false}
         rowKey="_id"
         loading={isLoadingTable}
+        onChange={changeTable}
       />
       <Pagination
         style={{ marginTop: "15px" }}
