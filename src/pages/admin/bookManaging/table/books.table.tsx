@@ -1,8 +1,14 @@
 import { formatDate, formatPrice } from "@/services/helpers";
-import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
-import { Pagination, Table } from "antd";
+import {
+  DeleteTwoTone,
+  EditTwoTone,
+  ExportOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
+import { Button, Pagination, Space, Table } from "antd";
 import type { TableProps } from "antd";
 import { useEffect } from "react";
+import { CSVLink } from "react-csv";
 
 interface IProps {
   searchObject: IBookSearchField;
@@ -171,6 +177,30 @@ const BookTable = (props: IProps) => {
 
   return (
     <>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: "20px",
+        }}
+      >
+        <h3>Book List</h3>
+
+        <Space>
+          <CSVLink data={data} filename={"booksExport.csv"}>
+            <Button type="primary">
+              <ExportOutlined />
+              Export
+            </Button>
+          </CSVLink>
+
+          <Button type="primary">
+            <PlusOutlined />
+            Add new
+          </Button>
+        </Space>
+      </div>
+
       <Table
         columns={columns}
         dataSource={data}
