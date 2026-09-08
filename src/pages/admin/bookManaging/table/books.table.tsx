@@ -1,17 +1,38 @@
-import { getBooksPaginate } from "@/services/book.api";
 import { formatDate, formatPrice } from "@/services/helpers";
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 import { Pagination, Table } from "antd";
 import type { TableProps } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-const BookTable = () => {
-  const [data, setData] = useState<IBookTable[]>([]);
-  const [total, setTotal] = useState(0);
-  const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(4);
+interface IProps {
+  searchObject: IBookSearchField;
+  data: IBookTable[];
+  total: number;
+  isLoadingTable: boolean;
+  fetchBooks: (
+    current: number,
+    pageSize: number,
+    mainText: string,
+    author: string,
+  ) => void;
+  current: number;
+  setCurrent: (value: number) => void;
+  pageSize: number;
+  setPageSize: (value: number) => void;
+}
 
-  const [isLoadingTable, setIsLoadingTable] = useState(false);
+const BookTable = (props: IProps) => {
+  const {
+    searchObject,
+    data,
+    total,
+    isLoadingTable,
+    fetchBooks,
+    current,
+    setCurrent,
+    pageSize,
+    setPageSize,
+  } = props;
 
   const columns: TableProps<IBookTable>["columns"] = [
     {
@@ -71,24 +92,19 @@ const BookTable = () => {
     },
   ];
 
-  const fetchBooks = async (current: number, pageSize: number) => {
-    setIsLoadingTable(true);
-    const res = await getBooksPaginate(current, pageSize);
-    if (res.data) {
-      setData(res.data.result);
-      setTotal(res.data.meta.total);
-      setIsLoadingTable(false);
-    }
-  };
-
   const changePagination = async (page: number, pageSize: number) => {
     setCurrent(page);
     setPageSize(pageSize);
-    await fetchBooks(page, pageSize);
+    await fetchBooks(
+      page,
+      pageSize,
+      searchObject.mainText,
+      searchObject.author,
+    );
   };
 
   useEffect(() => {
-    fetchBooks(current, pageSize);
+    fetchBooks(current, pageSize, searchObject.mainText, searchObject.author);
   }, []);
 
   return (

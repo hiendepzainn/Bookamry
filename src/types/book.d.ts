@@ -13,6 +13,11 @@ declare global {
     updatedAt: string;
     __v: number;
   }
+
+  interface IBookSearchField {
+    mainText: string;
+    author: string;
+  }
 }
 
 export {};
