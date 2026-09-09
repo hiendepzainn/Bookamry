@@ -7,8 +7,9 @@ import {
 } from "@ant-design/icons";
 import { Button, Pagination, Space, Table } from "antd";
 import type { TableProps } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { CSVLink } from "react-csv";
+import BookDrawer from "./tableComponents/drawer";
 
 interface IProps {
   searchObject: IBookSearchField;
@@ -45,13 +46,38 @@ const BookTable = (props: IProps) => {
     sort,
   } = props;
 
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [dataDrawer, setDataDrawer] = useState<IBookTable>({
+    __v: 0,
+    _id: "",
+    author: "",
+    category: "",
+    createdAt: "",
+    mainText: "",
+    price: 0,
+    quantity: 0,
+    slider: [],
+    sold: 0,
+    thumbnail: "",
+    updatedAt: "",
+  });
+
   const columns: TableProps<IBookTable>["columns"] = [
     {
       title: "ID",
       dataIndex: "_id",
       key: "id",
-      render: (value) => {
-        return <a>{value}</a>;
+      render: (value, record) => {
+        return (
+          <a
+            onClick={() => {
+              setIsDrawerOpen(true);
+              setDataDrawer(record);
+            }}
+          >
+            {value}
+          </a>
+        );
       },
     },
     {
@@ -209,6 +235,7 @@ const BookTable = (props: IProps) => {
         loading={isLoadingTable}
         onChange={changeTable}
       />
+
       <Pagination
         style={{ marginTop: "15px" }}
         align="end"
@@ -220,6 +247,12 @@ const BookTable = (props: IProps) => {
         pageSize={pageSize}
         showSizeChanger={true}
         onChange={changePagination}
+      />
+
+      <BookDrawer
+        dataDrawer={dataDrawer}
+        isDrawerOpen={isDrawerOpen}
+        setIsDrawerOpen={setIsDrawerOpen}
       />
     </>
   );
