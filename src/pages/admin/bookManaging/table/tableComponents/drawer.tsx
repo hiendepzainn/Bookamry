@@ -1,7 +1,7 @@
 import { formatDate, formatPrice } from "@/services/helpers";
 import { Badge, Descriptions, Divider, Drawer, Image, Upload } from "antd";
 import type { DescriptionsProps, UploadFile } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface IProps {
   dataDrawer: IBookTable;
@@ -56,20 +56,7 @@ const BookDrawer = (props: IProps) => {
     },
   ];
 
-  const [fileList, setFileList] = useState<UploadFile[]>([
-    {
-      uid: "-1",
-      name: "image.png",
-      status: "done",
-      url: "https://lienquan.garena.vn/wp-content/uploads/2024/05/51308-1.jpg",
-    },
-    {
-      uid: "-2",
-      name: "image.png",
-      status: "done",
-      url: "https://lienquan.garena.vn/wp-content/uploads/2024/05/8399a533ce456d906e0730213ae8b5d7659683c0dec671.jpg",
-    },
-  ]);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const previewFile = (file: UploadFile) => {
     if (file.url) {
@@ -77,6 +64,30 @@ const BookDrawer = (props: IProps) => {
       setIsPreviewOpen(true);
     }
   };
+
+  useEffect(() => {
+    if (dataDrawer.thumbnail === "") return;
+
+    const newFileList: UploadFile[] = [];
+
+    newFileList.push({
+      uid: "0",
+      name: "image.png",
+      status: "done",
+      url: `${import.meta.env.VITE_BACKEND_URL}/images/book/${dataDrawer.thumbnail}`,
+    });
+
+    dataDrawer.slider.forEach((value, index) => {
+      newFileList.push({
+        uid: (index + 1).toString(),
+        name: "image.png",
+        status: "done",
+        url: `${import.meta.env.VITE_BACKEND_URL}/images/book/${value}`,
+      });
+    });
+
+    setFileList(newFileList);
+  }, [dataDrawer]);
 
   return (
     <Drawer
