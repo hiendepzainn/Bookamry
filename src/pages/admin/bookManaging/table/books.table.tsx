@@ -10,6 +10,7 @@ import type { TableProps } from "antd";
 import { useEffect, useState } from "react";
 import { CSVLink } from "react-csv";
 import BookDrawer from "./tableComponents/drawer";
+import BookCreateModal from "./tableComponents/createModal";
 
 interface IProps {
   searchObject: IBookSearchField;
@@ -61,6 +62,8 @@ const BookTable = (props: IProps) => {
     thumbnail: "",
     updatedAt: "",
   });
+
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const columns: TableProps<IBookTable>["columns"] = [
     {
@@ -220,7 +223,7 @@ const BookTable = (props: IProps) => {
             </Button>
           </CSVLink>
 
-          <Button type="primary">
+          <Button onClick={() => setIsCreateModalOpen(true)} type="primary">
             <PlusOutlined />
             Add new
           </Button>
@@ -253,6 +256,11 @@ const BookTable = (props: IProps) => {
         dataDrawer={dataDrawer}
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
+      />
+
+      <BookCreateModal
+        isCreateModalOpen={isCreateModalOpen}
+        setIsCreateModalOpen={setIsCreateModalOpen}
       />
     </>
   );

@@ -13,4 +13,9 @@ const getBooksPaginate = (
   );
 };
 
-export { getBooksPaginate };
+const getBookCategory = () => {
+  const url = "/api/v1/database/category";
+  return instance1.get<unknown, IBackendResponse<string[]>>(url);
+};
+
+export { getBooksPaginate, getBookCategory };

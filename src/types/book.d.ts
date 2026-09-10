@@ -18,6 +18,21 @@ declare global {
     mainText: string;
     author: string;
   }
+
+  interface IBookCreate {
+    mainText: string;
+    author: string;
+    price: number;
+    category: string;
+    quantity: string;
+    thumbnail: string;
+    slider: string[];
+  }
+
+  interface IBookCategory {
+    value: string;
+    label: string;
+  }
 }
 
 export {};
