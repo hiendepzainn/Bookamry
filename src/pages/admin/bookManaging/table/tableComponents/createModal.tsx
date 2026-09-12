@@ -13,8 +13,8 @@ import {
   Upload,
 } from "antd";
 import { useEffect, useState } from "react";
-import type { FormProps } from "antd";
-import { RcFile } from "antd/es/upload";
+import type { FormProps, UploadFile } from "antd";
+import { RcFile, UploadChangeParam } from "antd/es/upload";
 
 interface IProps {
   isCreateModalOpen: boolean;
@@ -70,6 +70,13 @@ const BookCreateModal = (props: IProps) => {
     return false;
   };
 
+  const normFile = (e: UploadChangeParam<UploadFile>) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e?.fileList;
+  };
+
   useEffect(() => {
     fetchCategory();
   }, []);
@@ -91,13 +98,35 @@ const BookCreateModal = (props: IProps) => {
       <Form onFinish={onFinish} form={form} layout="vertical">
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item<IBookCreate> label="Tên sách" name="mainText" rules={[]}>
+            <Form.Item<IBookCreate>
+              label="Tên sách"
+              name="mainText"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng không bỏ trống!",
+                },
+              ]}
+            >
               <Input />
             </Form.Item>
           </Col>
 
           <Col span={12}>
-            <Form.Item<IBookCreate> label="Tác giả" name="author" rules={[]}>
+            <Form.Item<IBookCreate>
+              label="Tác giả"
+              name="author"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng không bỏ trống!",
+                },
+                {
+                  pattern: /^[a-zA-ZÀ-ỹ\s]+$/,
+                  message: "Chỉ được phép nhập chữ cái!",
+                },
+              ]}
+            >
               <Input />
             </Form.Item>
           </Col>
@@ -105,7 +134,16 @@ const BookCreateModal = (props: IProps) => {
 
         <Row gutter={16}>
           <Col span={6}>
-            <Form.Item<IBookCreate> label="Giá tiền" name="price" rules={[]}>
+            <Form.Item<IBookCreate>
+              label="Giá tiền"
+              name="price"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng không bỏ trống!",
+                },
+              ]}
+            >
               <InputNumber
                 formatter={(value) =>
                   `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -119,13 +157,31 @@ const BookCreateModal = (props: IProps) => {
           </Col>
 
           <Col span={6}>
-            <Form.Item<IBookCreate> label="Thể loại" name="category" rules={[]}>
+            <Form.Item<IBookCreate>
+              label="Thể loại"
+              name="category"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng không bỏ trống!",
+                },
+              ]}
+            >
               <Select options={categoryList} />
             </Form.Item>
           </Col>
 
           <Col span={6}>
-            <Form.Item<IBookCreate> label="Số lượng" name="quantity" rules={[]}>
+            <Form.Item<IBookCreate>
+              label="Số lượng"
+              name="quantity"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng không bỏ trống!",
+                },
+              ]}
+            >
               <InputNumber />
             </Form.Item>
           </Col>
@@ -138,7 +194,14 @@ const BookCreateModal = (props: IProps) => {
             <Form.Item<IBookCreate>
               label="Ảnh Thumbnail"
               name="thumbnail"
-              rules={[]}
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng không bỏ trống!",
+                },
+              ]}
+              valuePropName="fileList"
+              getValueFromEvent={normFile}
             >
               <Upload
                 accept=".jpg,.JPG,.jpeg,.JPEG,.png,.PNG"
@@ -160,7 +223,13 @@ const BookCreateModal = (props: IProps) => {
           </Col>
 
           <Col span={12}>
-            <Form.Item<IBookCreate> label="Ảnh Slider" name="slider" rules={[]}>
+            <Form.Item<IBookCreate>
+              label="Ảnh Slider"
+              name="slider"
+              valuePropName="fileList"
+              getValueFromEvent={normFile}
+              initialValue={[]}
+            >
               <Upload
                 accept=".jpg,.JPG,.jpeg,.JPEG,.png,.PNG"
                 multiple={true}
