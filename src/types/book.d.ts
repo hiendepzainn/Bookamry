@@ -24,14 +24,32 @@ declare global {
     author: string;
     price: number;
     category: string;
-    quantity: string;
-    thumbnail: string;
-    slider: string[];
+    quantity: number;
+    thumbnail: UploadFile[];
+    slider: UploadFile[];
   }
 
   interface IBookCategory {
     value: string;
     label: string;
+  }
+
+  interface IDataUploadImage {
+    fileUploaded: string;
+  }
+
+  interface IDataCreate {
+    _id: string;
+    thumbnail: string;
+    slider: string[];
+    mainText: string;
+    author: string;
+    price: number;
+    quantity: number;
+    category: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
   }
 }
 

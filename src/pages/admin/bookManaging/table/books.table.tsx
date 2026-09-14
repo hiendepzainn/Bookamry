@@ -261,6 +261,11 @@ const BookTable = (props: IProps) => {
       <BookCreateModal
         isCreateModalOpen={isCreateModalOpen}
         setIsCreateModalOpen={setIsCreateModalOpen}
+        current={current}
+        pageSize={pageSize}
+        sort={sort}
+        searchObject={searchObject}
+        fetchBooks={fetchBooks}
       />
     </>
   );

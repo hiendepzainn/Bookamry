@@ -1,4 +1,8 @@
-import { getBookCategory } from "@/services/book.api";
+import {
+  createNewBook,
+  getBookCategory,
+  uploadFileImage,
+} from "@/services/book.api";
 import { PlusOutlined } from "@ant-design/icons";
 import {
   App,
@@ -19,10 +23,29 @@ import { RcFile, UploadChangeParam } from "antd/es/upload";
 interface IProps {
   isCreateModalOpen: boolean;
   setIsCreateModalOpen: (vue: boolean) => void;
+  current: number;
+  pageSize: number;
+  sort: ISort;
+  searchObject: IBookSearchField;
+  fetchBooks: (
+    current: number,
+    pageSize: number,
+    mainText: string,
+    author: string,
+    sort: ISort,
+  ) => void;
 }
 
 const BookCreateModal = (props: IProps) => {
-  const { isCreateModalOpen, setIsCreateModalOpen } = props;
+  const {
+    isCreateModalOpen,
+    setIsCreateModalOpen,
+    current,
+    pageSize,
+    sort,
+    searchObject,
+    fetchBooks,
+  } = props;
 
   const { message } = App.useApp();
 
@@ -41,7 +64,7 @@ const BookCreateModal = (props: IProps) => {
       res.data.forEach((value) => {
         list.push({
           label: value,
-          value: value.toLowerCase(),
+          value: value,
         });
       });
 
@@ -49,8 +72,55 @@ const BookCreateModal = (props: IProps) => {
     }
   };
 
-  const onFinish: FormProps<IBookCreate>["onFinish"] = (values) => {
+  const onFinish: FormProps<IBookCreate>["onFinish"] = async (values) => {
     console.log("Success:", values);
+
+    //upload thumbnail
+    let thumbnail = "";
+    const res1 = await uploadFileImage(values.thumbnail[0].originFileObj);
+    if (res1.data) {
+      thumbnail = res1.data.fileUploaded;
+    }
+
+    //upload slider
+    const sliderList: string[] = [];
+    for (const item of values.slider) {
+      const res = await uploadFileImage(item.originFileObj);
+      if (res.data) {
+        sliderList.push(res.data.fileUploaded);
+      }
+    }
+
+    //create new book
+    const res2 = await createNewBook(
+      values.mainText,
+      values.author,
+      values.price,
+      values.quantity,
+      values.category,
+      thumbnail,
+      sliderList,
+    );
+
+    if (res2.data) {
+      message.success("create book success!!!");
+
+      //close & reset
+      setIsCreateModalOpen(false);
+      form.resetFields();
+
+      //reset Upload
+      setIsThumbnailUploaded(false);
+
+      //reload Table
+      await fetchBooks(
+        current,
+        pageSize,
+        searchObject.mainText,
+        searchObject.author,
+        sort,
+      );
+    }
   };
 
   const beforeUploadThumbnail = (file: RcFile) => {

@@ -18,4 +18,43 @@ const getBookCategory = () => {
   return instance1.get<unknown, IBackendResponse<string[]>>(url);
 };
 
-export { getBooksPaginate, getBookCategory };
+const uploadFileImage = (file: File) => {
+  const url = "/api/v1/file/upload";
+  const formData = new FormData();
+  formData.append("fileImg", file);
+
+  return instance1.post<unknown, IBackendResponse<IDataUploadImage>>(
+    url,
+    formData,
+    {
+      headers: {
+        "upload-type": "book",
+      },
+    },
+  );
+};
+
+const createNewBook = (
+  mainText: string,
+  author: string,
+  price: number,
+  quantity: number,
+  category: string,
+  thumbnail: string,
+  slider: string[],
+) => {
+  const url = "/api/v1/book";
+  const data = {
+    mainText,
+    author,
+    price,
+    category,
+    quantity,
+    thumbnail,
+    slider,
+  };
+
+  return instance1.post<unknown, IBackendResponse<IDataCreate>>(url, data);
+};
+
+export { getBooksPaginate, getBookCategory, uploadFileImage, createNewBook };
