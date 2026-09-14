@@ -1,8 +1,4 @@
-import {
-  createNewBook,
-  getBookCategory,
-  uploadFileImage,
-} from "@/services/book.api";
+import { createNewBook, uploadFileImage } from "@/services/book.api";
 import { PlusOutlined } from "@ant-design/icons";
 import {
   App,
@@ -16,7 +12,7 @@ import {
   Select,
   Upload,
 } from "antd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { FormProps, UploadFile } from "antd";
 import { RcFile, UploadChangeParam } from "antd/es/upload";
 
@@ -34,6 +30,7 @@ interface IProps {
     author: string,
     sort: ISort,
   ) => void;
+  categoryList: IBookCategory[];
 }
 
 const BookCreateModal = (props: IProps) => {
@@ -45,32 +42,14 @@ const BookCreateModal = (props: IProps) => {
     sort,
     searchObject,
     fetchBooks,
+    categoryList,
   } = props;
 
   const { message } = App.useApp();
 
   const [form] = Form.useForm();
 
-  const [categoryList, setCategoryList] = useState<IBookCategory[]>([]);
-
   const [isThumbnailUploaded, setIsThumbnailUploaded] = useState(false);
-
-  const fetchCategory = async () => {
-    const list: IBookCategory[] = [];
-
-    const res = await getBookCategory();
-
-    if (res.data) {
-      res.data.forEach((value) => {
-        list.push({
-          label: value,
-          value: value,
-        });
-      });
-
-      setCategoryList(list);
-    }
-  };
 
   const onFinish: FormProps<IBookCreate>["onFinish"] = async (values) => {
     console.log("Success:", values);
@@ -146,10 +125,6 @@ const BookCreateModal = (props: IProps) => {
     }
     return e?.fileList;
   };
-
-  useEffect(() => {
-    fetchCategory();
-  }, []);
 
   return (
     <Modal

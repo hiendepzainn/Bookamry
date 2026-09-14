@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 import { CSVLink } from "react-csv";
 import BookDrawer from "./tableComponents/drawer";
 import BookCreateModal from "./tableComponents/createModal";
+import BookUpdateModal from "./tableComponents/updateModal";
+import { getBookCategory } from "@/services/book.api";
 
 interface IProps {
   searchObject: IBookSearchField;
@@ -64,6 +66,24 @@ const BookTable = (props: IProps) => {
   });
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  const [categoryList, setCategoryList] = useState<IBookCategory[]>([]);
+
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [dataUpdate, setDataUpdate] = useState<IBookTable>({
+    __v: 0,
+    _id: "",
+    author: "",
+    category: "",
+    createdAt: "",
+    mainText: "",
+    price: 0,
+    quantity: 0,
+    slider: [],
+    sold: 0,
+    thumbnail: "",
+    updatedAt: "",
+  });
 
   const columns: TableProps<IBookTable>["columns"] = [
     {
@@ -124,12 +144,16 @@ const BookTable = (props: IProps) => {
     {
       title: "Action",
       key: "action",
-      render: () => {
+      render: (value, record) => {
         return (
           <div>
             <EditTwoTone
               style={{ marginRight: "10px" }}
               twoToneColor="#ff6421"
+              onClick={() => {
+                setIsUpdateModalOpen(true);
+                setDataUpdate(record);
+              }}
             />
             <DeleteTwoTone twoToneColor="#f71a1a" />
           </div>
@@ -194,6 +218,23 @@ const BookTable = (props: IProps) => {
     }
   };
 
+  const fetchCategory = async () => {
+    const list: IBookCategory[] = [];
+
+    const res = await getBookCategory();
+
+    if (res.data) {
+      res.data.forEach((value) => {
+        list.push({
+          label: value,
+          value: value,
+        });
+      });
+
+      setCategoryList(list);
+    }
+  };
+
   useEffect(() => {
     fetchBooks(
       current,
@@ -202,6 +243,7 @@ const BookTable = (props: IProps) => {
       searchObject.author,
       sort,
     );
+    fetchCategory();
   }, []);
 
   return (
@@ -266,6 +308,14 @@ const BookTable = (props: IProps) => {
         sort={sort}
         searchObject={searchObject}
         fetchBooks={fetchBooks}
+        categoryList={categoryList}
+      />
+
+      <BookUpdateModal
+        isUpdateModalOpen={isUpdateModalOpen}
+        setIsUpdateModalOpen={setIsUpdateModalOpen}
+        dataUpdate={dataUpdate}
+        categoryList={categoryList}
       />
     </>
   );
