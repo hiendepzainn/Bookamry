@@ -5,14 +5,14 @@ import {
   ExportOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import { Button, Pagination, Space, Table } from "antd";
+import { App, Button, Pagination, Popconfirm, Space, Table } from "antd";
 import type { TableProps } from "antd";
 import { useEffect, useState } from "react";
 import { CSVLink } from "react-csv";
 import BookDrawer from "./tableComponents/drawer";
 import BookCreateModal from "./tableComponents/createModal";
 import BookUpdateModal from "./tableComponents/updateModal";
-import { getBookCategory } from "@/services/book.api";
+import { deleteBook, getBookCategory } from "@/services/book.api";
 
 interface IProps {
   searchObject: IBookSearchField;
@@ -48,6 +48,8 @@ const BookTable = (props: IProps) => {
     setSort,
     sort,
   } = props;
+
+  const { message } = App.useApp();
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [dataDrawer, setDataDrawer] = useState<IBookTable>({
@@ -155,7 +157,17 @@ const BookTable = (props: IProps) => {
                 setDataUpdate(record);
               }}
             />
-            <DeleteTwoTone twoToneColor="#f71a1a" />
+
+            <Popconfirm
+              placement="left"
+              title="Delete Book"
+              description="Are you sure to Delete this Book?"
+              okText="Delete"
+              cancelText="Cancel"
+              onConfirm={() => confirmDelete(record._id)}
+            >
+              <DeleteTwoTone twoToneColor="#f71a1a" />
+            </Popconfirm>
           </div>
         );
       },
@@ -232,6 +244,22 @@ const BookTable = (props: IProps) => {
       });
 
       setCategoryList(list);
+    }
+  };
+
+  const confirmDelete = async (id: string) => {
+    const res = await deleteBook(id);
+
+    if (res.data) {
+      message.success("Delete success!");
+
+      await fetchBooks(
+        current,
+        pageSize,
+        searchObject.mainText,
+        searchObject.author,
+        sort,
+      );
     }
   };
 

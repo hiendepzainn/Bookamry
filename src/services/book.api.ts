@@ -78,7 +78,12 @@ const updateBook = (
     category,
   };
 
-  return instance1.put(url, data);
+  return instance1.put<IBackendResponse<string>>(url, data);
+};
+
+const deleteBook = (id: string) => {
+  const url = `/api/v1/book/${id}`;
+  return instance1.delete<IBackendResponse<string>>(url);
 };
 
 export {
@@ -87,4 +92,5 @@ export {
   uploadFileImage,
   createNewBook,
   updateBook,
+  deleteBook,
 };
