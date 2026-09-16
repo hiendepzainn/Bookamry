@@ -57,4 +57,34 @@ const createNewBook = (
   return instance1.post<unknown, IBackendResponse<IDataCreate>>(url, data);
 };
 
-export { getBooksPaginate, getBookCategory, uploadFileImage, createNewBook };
+const updateBook = (
+  id: string,
+  category: string,
+  quantity: number,
+  price: number,
+  author: string,
+  mainText: string,
+  slider: string[],
+  thumbnail: string,
+) => {
+  const url = `/api/v1/book/${id}`;
+  const data = {
+    mainText,
+    author,
+    slider,
+    thumbnail,
+    price,
+    quantity,
+    category,
+  };
+
+  return instance1.put(url, data);
+};
+
+export {
+  getBooksPaginate,
+  getBookCategory,
+  uploadFileImage,
+  createNewBook,
+  updateBook,
+};

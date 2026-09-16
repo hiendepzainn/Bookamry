@@ -316,6 +316,11 @@ const BookTable = (props: IProps) => {
         setIsUpdateModalOpen={setIsUpdateModalOpen}
         dataUpdate={dataUpdate}
         categoryList={categoryList}
+        current={current}
+        pageSize={pageSize}
+        sort={sort}
+        searchObject={searchObject}
+        fetchBooks={fetchBooks}
       />
     </>
   );
