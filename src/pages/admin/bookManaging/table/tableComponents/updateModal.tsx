@@ -136,6 +136,10 @@ const BookUpdateModal = (props: IProps) => {
     setListSlider(listSlider);
 
     //fill Thumbnail
+    setIsThumbnailUploaded(true);
+
+    form.setFieldValue("thumbnail", "hehe");
+
     setListThumbnail([
       {
         uid: "0",
@@ -157,6 +161,7 @@ const BookUpdateModal = (props: IProps) => {
       onOk={() => form.submit()}
       onCancel={() => {
         setIsUpdateModalOpen(false);
+        form.resetFields();
       }}
     >
       <Divider />
@@ -266,7 +271,6 @@ const BookUpdateModal = (props: IProps) => {
                   message: "Vui lòng không bỏ trống!",
                 },
               ]}
-              initialValue={"hehe"}
             >
               <Upload
                 accept=".jpg,.JPG,.jpeg,.JPEG,.png,.PNG"
