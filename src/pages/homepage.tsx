@@ -1,3 +1,4 @@
+import { getBookCategory } from "@/services/book.api";
 import { formatPrice } from "@/services/helpers";
 import {
   ArrowRightOutlined,
@@ -16,12 +17,13 @@ import {
   Tabs,
   TabsProps,
 } from "antd";
+import { useEffect, useState } from "react";
 
 const Homepage = () => {
   const { useBreakpoint } = Grid;
   const screens = useBreakpoint();
 
-  const optionsCheckbox = ["A", "B", "C", "D", "E", "F"];
+  const [categoryList, setCategoryList] = useState<IBookCategory[]>([]);
 
   const items: TabsProps["items"] = [
     {
@@ -208,14 +210,38 @@ const Homepage = () => {
     },
   ];
 
+  const fetchCategory = async () => {
+    const list: IBookCategory[] = [];
+
+    const res = await getBookCategory();
+
+    if (res.data) {
+      res.data.forEach((value) => {
+        list.push({
+          label: value,
+          value: value,
+        });
+      });
+
+      setCategoryList(list);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategory();
+  }, []);
+
   return (
     <>
       <Row>
         <Col
           style={{
-            border: "1px solid #ddd",
-            padding: "8px",
-            backgroundColor: "#fff",
+            // border: "1px solid #ddd",
+            padding: "12px",
+            backgroundColor: "#ffffff",
+            margin: "30px 20px 0px 20px",
+            borderRadius: "8px",
+            boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
           }}
           xs={0}
           sm={4}
@@ -224,19 +250,31 @@ const Homepage = () => {
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div>
                 <FilterTwoTone />
-                <span style={{ marginLeft: "4px" }}>Bộ lọc tìm kiếm</span>
+                <span
+                  style={{
+                    marginLeft: "4px",
+                    fontSize: "15px",
+                    fontWeight: "500",
+                  }}
+                >
+                  Bộ lọc tìm kiếm
+                </span>
               </div>
 
               <ReloadOutlined />
             </div>
+          </div>
 
-            <div style={{ margin: "5px 0px" }}>Danh mục sản phẩm</div>
+          <Divider />
+
+          <div>
+            <div style={{ margin: "5px 0px 20px" }}>Danh mục sản phẩm</div>
 
             <div>
-              {optionsCheckbox.map((value) => {
+              {categoryList.map((value) => {
                 return (
-                  <div>
-                    <Checkbox>{value}</Checkbox>
+                  <div style={{ marginBottom: "12px" }}>
+                    <Checkbox>{value.label}</Checkbox>
                   </div>
                 );
               })}
@@ -316,7 +354,16 @@ const Homepage = () => {
           </div>
         </Col>
 
-        <Col style={{ padding: "8px" }} xs={24} sm={20}>
+        <Col
+          style={{
+            margin: "30px 0px 10px",
+            padding: screens.xs ? "8px 0px 8px 10px" : "8px 0px 8px 30px",
+            boxShadow: "rgba(147, 137, 137, 0.2) 0px 7px 29px 0px",
+            borderRadius: "8px",
+          }}
+          xs={24}
+          sm={19}
+        >
           <div>
             <Tabs defaultActiveKey="1" items={items} />
           </div>
