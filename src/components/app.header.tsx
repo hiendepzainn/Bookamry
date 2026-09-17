@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { MyContext } from "./context/app.context";
 import type { MenuProps } from "antd";
 import { Link } from "react-router-dom";
-import { App, Avatar, Badge, Button, Dropdown, Input, Space } from "antd";
+import { App, Avatar, Badge, Button, Dropdown, Grid, Input, Space } from "antd";
 import {
   SearchOutlined,
   ShoppingCartOutlined,
@@ -11,6 +11,9 @@ import {
 import { logout } from "@/services/auth.api";
 
 const AppHeader = () => {
+  const { useBreakpoint } = Grid;
+  const screens = useBreakpoint();
+
   const { message } = App.useApp();
   const CART_ITEM_COUNT = 3;
 
@@ -71,6 +74,69 @@ const AppHeader = () => {
     },
   ];
 
+  const styles: Record<string, React.CSSProperties> = {
+    header: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: screens.xs ? "0px" : "0 24px",
+      height: "72px",
+      backgroundColor: "#ffffff",
+      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
+      position: "sticky",
+      top: 0,
+      zIndex: 1000,
+    },
+    leftSection: {
+      display: "flex",
+      alignItems: "center",
+      textDecoration: "none",
+      cursor: "pointer",
+    },
+    logo: {
+      width: "36px",
+      height: "36px",
+      marginRight: screens.xs ? "-12px" : "12px",
+      marginLeft: screens.xs ? "18px" : "0px",
+    },
+    brandName: {
+      fontSize: "22px",
+      fontWeight: 700,
+      color: "#1677ff",
+    },
+    middleSection: {
+      flex: 1,
+      display: "flex",
+      justifyContent: "center",
+      padding: screens.xs ? "0 30px" : "0 40px",
+    },
+    searchInput: {
+      maxWidth: "600px",
+      width: "100%",
+      borderRadius: "8px",
+    },
+    rightSection: {
+      display: "flex",
+      alignItems: "center",
+      gap: screens.xs ? "16px" : "32px",
+    },
+    cartIcon: {
+      fontSize: "26px",
+      cursor: "pointer",
+      color: "#595959",
+    },
+    userInfo: {
+      cursor: "pointer",
+      padding: "4px 8px",
+      borderRadius: "6px",
+      transition: "background-color 0.2s",
+    },
+    userName: {
+      fontWeight: 500,
+      color: "#262626",
+    },
+  };
+
   return (
     <header style={styles.header}>
       {/* LEFT: Logo & Brand Name */}
@@ -80,7 +146,7 @@ const AppHeader = () => {
           alt="React Logo"
           style={styles.logo}
         />
-        <span style={styles.brandName}>Bookamry</span>
+        {screens.xs ? <></> : <span style={styles.brandName}>Bookamry</span>}
       </Link>
 
       {/* MIDDLE: Search Bar */}
@@ -119,7 +185,11 @@ const AppHeader = () => {
                   icon={<UserOutlined />}
                   src={`${import.meta.env.VITE_BACKEND_URL}/images/avatar/${user.avatar}`}
                 />
-                <span style={styles.userName}>{user.fullName}</span>
+                {screens.xs ? (
+                  <></>
+                ) : (
+                  <span style={styles.userName}>{user.fullName}</span>
+                )}
               </Space>
             </div>
           </Dropdown>
@@ -127,68 +197,6 @@ const AppHeader = () => {
       </div>
     </header>
   );
-};
-
-const styles: Record<string, React.CSSProperties> = {
-  header: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "0 24px",
-    height: "72px",
-    backgroundColor: "#ffffff",
-    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
-    position: "sticky",
-    top: 0,
-    zIndex: 1000,
-  },
-  leftSection: {
-    display: "flex",
-    alignItems: "center",
-    textDecoration: "none",
-    cursor: "pointer",
-  },
-  logo: {
-    width: "36px",
-    height: "36px",
-    marginRight: "12px",
-  },
-  brandName: {
-    fontSize: "22px",
-    fontWeight: 700,
-    color: "#1677ff",
-  },
-  middleSection: {
-    flex: 1,
-    display: "flex",
-    justifyContent: "center",
-    padding: "0 40px",
-  },
-  searchInput: {
-    maxWidth: "600px",
-    width: "100%",
-    borderRadius: "8px",
-  },
-  rightSection: {
-    display: "flex",
-    alignItems: "center",
-    gap: "32px",
-  },
-  cartIcon: {
-    fontSize: "26px",
-    cursor: "pointer",
-    color: "#595959",
-  },
-  userInfo: {
-    cursor: "pointer",
-    padding: "4px 8px",
-    borderRadius: "6px",
-    transition: "background-color 0.2s",
-  },
-  userName: {
-    fontWeight: 500,
-    color: "#262626",
-  },
 };
 
 export default AppHeader;

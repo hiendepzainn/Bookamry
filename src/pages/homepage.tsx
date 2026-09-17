@@ -9,6 +9,7 @@ import {
   Checkbox,
   Col,
   Divider,
+  Grid,
   InputNumber,
   Rate,
   Row,
@@ -17,6 +18,9 @@ import {
 } from "antd";
 
 const Homepage = () => {
+  const { useBreakpoint } = Grid;
+  const screens = useBreakpoint();
+
   const optionsCheckbox = ["A", "B", "C", "D", "E", "F"];
 
   const items: TabsProps["items"] = [
@@ -57,8 +61,7 @@ const Homepage = () => {
       _id: "6a7de43fff385ec18ae31989",
       thumbnail: "3-931186dd6dcd231da1032c8220332fea.jpg",
       slider: [],
-      mainText:
-        "Tư Duy Về Tiền Bạc - Những Lựa Chọn Tài Chính Đúng Đắn Và Sáng Suốt Hơn",
+      mainText: "Tư Duy Về Tiền Bạc - Lựa Chọn Tài Chính Đúng Đắn Và Sáng Suốt",
       author: "Jonathan Clements",
       price: 70000,
       sold: 20,
@@ -208,7 +211,15 @@ const Homepage = () => {
   return (
     <>
       <Row>
-        <Col style={{ border: "1px solid #ddd", padding: "8px" }} span={4}>
+        <Col
+          style={{
+            border: "1px solid #ddd",
+            padding: "8px",
+            backgroundColor: "#fff",
+          }}
+          xs={0}
+          sm={4}
+        >
           <div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div>
@@ -305,7 +316,7 @@ const Homepage = () => {
           </div>
         </Col>
 
-        <Col style={{ padding: "8px" }} span={20}>
+        <Col style={{ padding: "8px" }} xs={24} sm={20}>
           <div>
             <Tabs defaultActiveKey="1" items={items} />
           </div>
@@ -315,11 +326,11 @@ const Homepage = () => {
               return (
                 <div
                   style={{
+                    width: screens.xs ? "44%" : "17.5%",
                     padding: "6px",
-                    width: "18%",
                     border: "1px solid #ddd",
                     borderRadius: "5px",
-                    marginRight: "8px",
+                    marginRight: "10px",
                     marginBottom: "6px",
                     boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
                   }}
@@ -340,16 +351,39 @@ const Homepage = () => {
                   </div>
 
                   <div>
-                    <p style={{ height: "10vh", fontSize: "14px" }}>
+                    <p
+                      style={{
+                        height: screens.xs ? "8vh" : "10vh",
+                        fontSize: "14px",
+                      }}
+                    >
                       {item.mainText}
                     </p>
                   </div>
 
-                  <div>{formatPrice(item.price)}</div>
+                  <div
+                    style={{
+                      color: "#EE4D2D",
+                      fontSize: "17px",
+                      fontWeight: "500",
+                    }}
+                  >
+                    {formatPrice(item.price)}
+                  </div>
 
-                  <div>
-                    <Rate disabled defaultValue={5} />
-                    <span style={{ marginLeft: "5px" }}>Đã bán 1k</span>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Rate
+                      style={{ fontSize: "14px" }}
+                      disabled
+                      defaultValue={5}
+                    />
+                    <span style={{ marginLeft: "5px" }}>1k+ đã bán</span>
                   </div>
                 </div>
               );
