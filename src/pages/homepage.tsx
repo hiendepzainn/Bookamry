@@ -34,21 +34,23 @@ const Homepage = () => {
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState(20);
 
+  const [sort, setSort] = useState<ISort>({ name: "sold", type: "dsc" });
+
   const items: TabsProps["items"] = [
     {
-      key: "1",
+      key: "popular",
       label: "Phổ biến",
     },
     {
-      key: "2",
+      key: "new",
       label: "Hàng mới",
     },
     {
-      key: "3",
+      key: "lowToHigh",
       label: "Giá thấp đến cao",
     },
     {
-      key: "4",
+      key: "highToLow",
       label: "Giá cao đến thấp",
     },
   ];
@@ -72,9 +74,9 @@ const Homepage = () => {
     }
   };
 
-  const fetchBooks = async (current: number, pageSize: number) => {
+  const fetchBooks = async (current: number, pageSize: number, sort: ISort) => {
     setIsLoading(true);
-    const res = await getBooksHomepage(current, pageSize);
+    const res = await getBooksHomepage(current, pageSize, sort);
 
     if (res.data) {
       setData(res.data.result);
@@ -84,14 +86,46 @@ const Homepage = () => {
   };
 
   const changePagination = async (newPage: number, newPageSize: number) => {
-    await fetchBooks(newPage, newPageSize);
+    await fetchBooks(newPage, newPageSize, sort);
     setCurrent(newPage);
     setPageSize(newPageSize);
   };
 
+  const changeTab = async (activeKey: string) => {
+    const newSort: ISort = { name: "", type: "" };
+
+    switch (activeKey) {
+      case "popular":
+        newSort.name = "sold";
+        newSort.type = "dsc";
+        break;
+
+      case "new":
+        newSort.name = "createdAt";
+        newSort.type = "dsc";
+        break;
+
+      case "lowToHigh":
+        newSort.name = "price";
+        newSort.type = "asc";
+        break;
+
+      case "highToLow":
+        newSort.name = "price";
+        newSort.type = "dsc";
+        break;
+
+      default:
+        break;
+    }
+
+    setSort(newSort);
+    await fetchBooks(current, pageSize, newSort);
+  };
+
   useEffect(() => {
     fetchCategory();
-    fetchBooks(current, pageSize);
+    fetchBooks(current, pageSize, sort);
   }, []);
 
   return (
@@ -229,7 +263,7 @@ const Homepage = () => {
           lg={19}
         >
           <div>
-            <Tabs defaultActiveKey="1" items={items} />
+            <Tabs defaultActiveKey="1" items={items} onChange={changeTab} />
           </div>
 
           <Spin spinning={isLoading}>
@@ -317,7 +351,7 @@ const Homepage = () => {
                           fontSize: screens.xs ? "0.78rem" : "0.9rem",
                         }}
                       >
-                        1k+ đã bán
+                        {item.sold ? item.sold : 0} đã bán
                       </span>
                     </div>
                   </div>
