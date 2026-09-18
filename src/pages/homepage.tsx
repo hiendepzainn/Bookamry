@@ -32,7 +32,7 @@ const Homepage = () => {
 
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(20);
 
   const items: TabsProps["items"] = [
     {
@@ -136,7 +136,7 @@ const Homepage = () => {
             <div>
               {categoryList.map((value) => {
                 return (
-                  <div style={{ marginBottom: "12px" }}>
+                  <div key={value.label} style={{ marginBottom: "12px" }}>
                     <Checkbox>{value.label}</Checkbox>
                   </div>
                 );
@@ -225,7 +225,8 @@ const Homepage = () => {
             borderRadius: "8px",
           }}
           xs={24}
-          sm={19}
+          sm={18}
+          lg={19}
         >
           <div>
             <Tabs defaultActiveKey="1" items={items} />
@@ -242,8 +243,11 @@ const Homepage = () => {
               {data.map((item) => {
                 return (
                   <div
+                    key={item._id}
                     style={{
-                      width: screens.xs ? "44%" : "17.5%",
+                      width: screens.xs
+                        ? "43.25%"
+                        : `${screens.xl ? `17%` : `${screens.md ? `20%` : `27%`}`}`,
                       padding: "6px",
                       border: "1px solid #ddd",
                       borderRadius: "5px",
@@ -274,8 +278,12 @@ const Homepage = () => {
                     <div>
                       <p
                         style={{
-                          height: screens.xs ? "8vh" : "10vh",
-                          fontSize: "14px",
+                          height: "3rem",
+                          display: "-webkit-box",
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
                         }}
                       >
                         {item.mainText}
@@ -300,11 +308,17 @@ const Homepage = () => {
                       }}
                     >
                       <Rate
-                        style={{ fontSize: "14px" }}
+                        style={{ fontSize: screens.xs ? "0.7rem" : "0.8rem" }}
                         disabled
                         defaultValue={5}
                       />
-                      <span style={{ marginLeft: "5px" }}>1k+ đã bán</span>
+                      <span
+                        style={{
+                          fontSize: screens.xs ? "0.78rem" : "0.9rem",
+                        }}
+                      >
+                        1k+ đã bán
+                      </span>
                     </div>
                   </div>
                 );
