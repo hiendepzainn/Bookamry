@@ -13,7 +13,7 @@ const getBooksHomepage = (
   const querySort =
     sort.name === ""
       ? ""
-      : `&sort=${sort.type === "asc" ? "" : "-"}${sort.name}`;
+      : `&sort=${sort.type === "asc" ? "" : "-"}${sort.name},_id`;
 
   const queryCategory =
     categoryList.length === 0 ? "" : `&category=${categoryList.join()}`;
