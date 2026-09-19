@@ -12,6 +12,7 @@ import {
   Col,
   Divider,
   Form,
+  FormProps,
   Grid,
   InputNumber,
   Pagination,
@@ -40,6 +41,10 @@ const Homepage = () => {
   const [sort, setSort] = useState<ISort>({ name: "sold", type: "dsc" });
 
   const [filterCategory, setFilterCategory] = useState<string[]>([]);
+  const [filterPrice, setFilterPrice] = useState<IFilterPrice>({
+    from: "",
+    to: "",
+  });
 
   const items: TabsProps["items"] = [
     {
@@ -84,9 +89,17 @@ const Homepage = () => {
     pageSize: number,
     sort: ISort,
     filterCategory: string[],
+    filterPrice: IFilterPrice,
   ) => {
     setIsLoading(true);
-    const res = await getBooksHomepage(current, pageSize, sort, filterCategory);
+    const res = await getBooksHomepage(
+      current,
+      pageSize,
+      sort,
+      filterCategory,
+      filterPrice.from,
+      filterPrice.to,
+    );
 
     if (res.data) {
       setData(res.data.result);
@@ -96,7 +109,7 @@ const Homepage = () => {
   };
 
   const changePagination = async (newPage: number, newPageSize: number) => {
-    await fetchBooks(newPage, newPageSize, sort, filterCategory);
+    await fetchBooks(newPage, newPageSize, sort, filterCategory, filterPrice);
     setCurrent(newPage);
     setPageSize(newPageSize);
   };
@@ -130,11 +143,13 @@ const Homepage = () => {
     }
 
     setSort(newSort);
-    await fetchBooks(current, pageSize, newSort, filterCategory);
+    setCurrent(1);
+
+    await fetchBooks(1, pageSize, newSort, filterCategory, filterPrice);
   };
 
   const changeCheckboxGroup = async (checkedValues: string[]) => {
-    await fetchBooks(1, pageSize, sort, checkedValues);
+    await fetchBooks(1, pageSize, sort, checkedValues, filterPrice);
 
     setFilterCategory(checkedValues);
     setCurrent(1);
@@ -143,15 +158,26 @@ const Homepage = () => {
   const resetFilter = async () => {
     form.resetFields();
 
-    await fetchBooks(1, pageSize, sort, []);
+    await fetchBooks(1, pageSize, sort, [], { from: "", to: "" });
 
+    setFilterPrice({ from: "", to: "" });
     setFilterCategory([]);
+    setCurrent(1);
+  };
+
+  const onFinish: FormProps<IBookFilter>["onFinish"] = (values) => {
+    const from = values.from ? values.from.toString() : "";
+    const to = values.to ? values.to.toString() : "";
+
+    fetchBooks(1, pageSize, sort, filterCategory, { from: from, to: to });
+
+    setFilterPrice({ from: from, to: to });
     setCurrent(1);
   };
 
   useEffect(() => {
     fetchCategory();
-    fetchBooks(current, pageSize, sort, filterCategory);
+    fetchBooks(current, pageSize, sort, filterCategory, filterPrice);
   }, []);
 
   return (
@@ -169,32 +195,32 @@ const Homepage = () => {
           xs={0}
           sm={4}
         >
-          <div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div>
-                <FilterTwoTone />
-                <span
-                  style={{
-                    marginLeft: "4px",
-                    fontSize: "15px",
-                    fontWeight: "500",
-                  }}
-                >
-                  Bộ lọc tìm kiếm
-                </span>
+          <Form form={form} onFinish={onFinish}>
+            <div>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>
+                  <FilterTwoTone />
+                  <span
+                    style={{
+                      marginLeft: "4px",
+                      fontSize: "15px",
+                      fontWeight: "500",
+                    }}
+                  >
+                    Bộ lọc tìm kiếm
+                  </span>
+                </div>
+
+                <ReloadOutlined onClick={resetFilter} />
               </div>
-
-              <ReloadOutlined onClick={resetFilter} />
             </div>
-          </div>
 
-          <Divider />
+            <Divider />
 
-          <div>
-            <div style={{ margin: "5px 0px 20px" }}>Danh mục sản phẩm</div>
+            <div>
+              <div style={{ margin: "5px 0px 20px" }}>Danh mục sản phẩm</div>
 
-            <Form form={form}>
-              <Form.Item name="category">
+              <Form.Item<IBookFilter> name="category">
                 <Checkbox.Group onChange={changeCheckboxGroup}>
                   <Space direction="vertical">
                     {categoryList.map((item) => {
@@ -207,80 +233,92 @@ const Homepage = () => {
                   </Space>
                 </Checkbox.Group>
               </Form.Item>
-            </Form>
-          </div>
-
-          <Divider />
-
-          <div>
-            <div style={{ marginBottom: "8px" }}>Khoảng giá</div>
-
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-around",
-                marginBottom: "20px",
-              }}
-            >
-              <InputNumber
-                formatter={(value) =>
-                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                }
-                parser={(value) =>
-                  value?.replace(/\$\s?|(,*)/g, "") as unknown as number
-                }
-              />
-
-              <ArrowRightOutlined />
-
-              <InputNumber
-                formatter={(value) =>
-                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                }
-                parser={(value) =>
-                  value?.replace(/\$\s?|(,*)/g, "") as unknown as number
-                }
-              />
             </div>
 
-            <div style={{ textAlign: "center" }}>
-              <Button style={{ width: "80%" }} type="primary">
-                Áp dụng
-              </Button>
-            </div>
-          </div>
-
-          <Divider />
-
-          <div>
-            <div style={{ marginBottom: "10px" }}>Đánh giá</div>
+            <Divider />
 
             <div>
-              <div>
-                <Rate disabled defaultValue={5} />
+              <div style={{ marginBottom: "8px" }}>Khoảng giá</div>
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  marginBottom: "20px",
+                  alignItems: "center",
+                }}
+              >
+                <Form.Item<IBookFilter>
+                  style={{ marginBottom: "0" }}
+                  name="from"
+                >
+                  <InputNumber
+                    formatter={(value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
+                    parser={(value) =>
+                      value?.replace(/\$\s?|(,*)/g, "") as unknown as number
+                    }
+                  />
+                </Form.Item>
+
+                <ArrowRightOutlined />
+
+                <Form.Item<IBookFilter> style={{ marginBottom: "0" }} name="to">
+                  <InputNumber
+                    formatter={(value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
+                    parser={(value) =>
+                      value?.replace(/\$\s?|(,*)/g, "") as unknown as number
+                    }
+                  />
+                </Form.Item>
               </div>
 
-              <div>
-                <Rate disabled defaultValue={4} />
-                <span>trở lên</span>
-              </div>
-
-              <div>
-                <Rate disabled defaultValue={3} />
-                <span>trở lên</span>
-              </div>
-
-              <div>
-                <Rate disabled defaultValue={2} />
-                <span>trở lên</span>
-              </div>
-
-              <div>
-                <Rate disabled defaultValue={1} />
-                <span>trở lên</span>
+              <div style={{ textAlign: "center" }}>
+                <Button
+                  htmlType="submit"
+                  style={{ width: "80%" }}
+                  type="primary"
+                >
+                  Áp dụng
+                </Button>
               </div>
             </div>
-          </div>
+
+            <Divider />
+
+            <div>
+              <div style={{ marginBottom: "10px" }}>Đánh giá</div>
+
+              <div>
+                <div>
+                  <Rate disabled defaultValue={5} />
+                </div>
+
+                <div>
+                  <Rate disabled defaultValue={4} />
+                  <span>trở lên</span>
+                </div>
+
+                <div>
+                  <Rate disabled defaultValue={3} />
+                  <span>trở lên</span>
+                </div>
+
+                <div>
+                  <Rate disabled defaultValue={2} />
+                  <span>trở lên</span>
+                </div>
+
+                <div>
+                  <Rate disabled defaultValue={1} />
+                  <span>trở lên</span>
+                </div>
+              </div>
+            </div>
+          </Form>
         </Col>
 
         <Col
