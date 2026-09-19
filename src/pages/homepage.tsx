@@ -11,11 +11,13 @@ import {
   Checkbox,
   Col,
   Divider,
+  Form,
   Grid,
   InputNumber,
   Pagination,
   Rate,
   Row,
+  Space,
   Spin,
   Tabs,
   TabsProps,
@@ -23,6 +25,7 @@ import {
 import { useEffect, useState } from "react";
 
 const Homepage = () => {
+  const [form] = Form.useForm();
   const { useBreakpoint } = Grid;
   const screens = useBreakpoint();
 
@@ -35,6 +38,8 @@ const Homepage = () => {
   const [pageSize, setPageSize] = useState(20);
 
   const [sort, setSort] = useState<ISort>({ name: "sold", type: "dsc" });
+
+  const [filterCategory, setFilterCategory] = useState<string[]>([]);
 
   const items: TabsProps["items"] = [
     {
@@ -74,9 +79,14 @@ const Homepage = () => {
     }
   };
 
-  const fetchBooks = async (current: number, pageSize: number, sort: ISort) => {
+  const fetchBooks = async (
+    current: number,
+    pageSize: number,
+    sort: ISort,
+    filterCategory: string[],
+  ) => {
     setIsLoading(true);
-    const res = await getBooksHomepage(current, pageSize, sort);
+    const res = await getBooksHomepage(current, pageSize, sort, filterCategory);
 
     if (res.data) {
       setData(res.data.result);
@@ -86,7 +96,7 @@ const Homepage = () => {
   };
 
   const changePagination = async (newPage: number, newPageSize: number) => {
-    await fetchBooks(newPage, newPageSize, sort);
+    await fetchBooks(newPage, newPageSize, sort, filterCategory);
     setCurrent(newPage);
     setPageSize(newPageSize);
   };
@@ -120,12 +130,28 @@ const Homepage = () => {
     }
 
     setSort(newSort);
-    await fetchBooks(current, pageSize, newSort);
+    await fetchBooks(current, pageSize, newSort, filterCategory);
+  };
+
+  const changeCheckboxGroup = async (checkedValues: string[]) => {
+    await fetchBooks(1, pageSize, sort, checkedValues);
+
+    setFilterCategory(checkedValues);
+    setCurrent(1);
+  };
+
+  const resetFilter = async () => {
+    form.resetFields();
+
+    await fetchBooks(1, pageSize, sort, []);
+
+    setFilterCategory([]);
+    setCurrent(1);
   };
 
   useEffect(() => {
     fetchCategory();
-    fetchBooks(current, pageSize, sort);
+    fetchBooks(current, pageSize, sort, filterCategory);
   }, []);
 
   return (
@@ -158,7 +184,7 @@ const Homepage = () => {
                 </span>
               </div>
 
-              <ReloadOutlined />
+              <ReloadOutlined onClick={resetFilter} />
             </div>
           </div>
 
@@ -167,15 +193,21 @@ const Homepage = () => {
           <div>
             <div style={{ margin: "5px 0px 20px" }}>Danh mục sản phẩm</div>
 
-            <div>
-              {categoryList.map((value) => {
-                return (
-                  <div key={value.label} style={{ marginBottom: "12px" }}>
-                    <Checkbox>{value.label}</Checkbox>
-                  </div>
-                );
-              })}
-            </div>
+            <Form form={form}>
+              <Form.Item name="category">
+                <Checkbox.Group onChange={changeCheckboxGroup}>
+                  <Space direction="vertical">
+                    {categoryList.map((item) => {
+                      return (
+                        <Checkbox key={item.value} value={item.value}>
+                          {item.label}
+                        </Checkbox>
+                      );
+                    })}
+                  </Space>
+                </Checkbox.Group>
+              </Form.Item>
+            </Form>
           </div>
 
           <Divider />
