@@ -4,11 +4,29 @@ import {
   ShoppingCartOutlined,
 } from "@ant-design/icons";
 import { Col, Divider, Rate, Row, Space } from "antd";
+import ImageGallery, { GalleryItem } from "react-image-gallery";
+import "../../node_modules/react-image-gallery/styles/image-gallery.css";
 import { useParams } from "react-router-dom";
 
 const BookDetails = () => {
   const params = useParams();
   console.log(params.id);
+
+  const images: GalleryItem[] = [
+    {
+      original: "https://picsum.photos/id/1018/1000/600/",
+      thumbnail: "https://picsum.photos/id/1018/250/150/",
+    },
+    {
+      original: "https://picsum.photos/id/1015/1000/600/",
+      thumbnail: "https://picsum.photos/id/1015/250/150/",
+    },
+    {
+      original: "https://picsum.photos/id/1019/1000/600/",
+      thumbnail: "https://picsum.photos/id/1019/250/150/",
+    },
+  ];
+
   return (
     <div
       style={{
@@ -18,16 +36,21 @@ const BookDetails = () => {
       }}
     >
       <Row gutter={24}>
-        <Col style={{ backgroundColor: "#f46c6c" }} span={10}>
-          slider
+        <Col style={{}} span={10}>
+          <ImageGallery
+            items={images}
+            showPlayButton={false}
+            showFullscreenButton={false}
+            showNav={false}
+          />
         </Col>
 
-        <Col style={{ backgroundColor: "#a7f772" }} span={14}>
+        <Col style={{}} span={14}>
           <div>
             Tác giả: <a>Robert Kiyosaki</a>
           </div>
 
-          <div style={{ fontSize: "20px" }}>
+          <div style={{ fontSize: "20px", margin: "5px 0px" }}>
             Tư Duy Về Tiền Bạc - Lựa Chọn Tài Chính Đúng Đắn Và Sáng Suốt
           </div>
 
@@ -45,8 +68,8 @@ const BookDetails = () => {
               fontWeight: "600",
               color: "#EE4D2D",
               padding: "20px 16px",
-              backgroundColor: "#ddd",
-              margin: "20px 0px",
+              backgroundColor: "#F9F9F9",
+              margin: "10px 0px 20px",
             }}
           >
             960.000 đ
@@ -74,11 +97,34 @@ const BookDetails = () => {
               </Col>
 
               <Col span={20}>
-                <button style={{ width: "30px", height: "30px" }}>
+                <button
+                  style={{
+                    width: "30px",
+                    height: "30px",
+                    backgroundColor: "#fff",
+                    border: "1px solid #ddd",
+                  }}
+                >
                   <MinusOutlined />
                 </button>
-                <button style={{ width: "45px", height: "30px" }}>1</button>
-                <button style={{ width: "30px", height: "30px" }}>
+                <button
+                  style={{
+                    width: "45px",
+                    height: "30px",
+                    backgroundColor: "#fff",
+                    border: "1px solid #ddd",
+                  }}
+                >
+                  1
+                </button>
+                <button
+                  style={{
+                    width: "30px",
+                    height: "30px",
+                    backgroundColor: "#fff",
+                    border: "1px solid #ddd",
+                  }}
+                >
                   <PlusOutlined />
                 </button>
               </Col>
