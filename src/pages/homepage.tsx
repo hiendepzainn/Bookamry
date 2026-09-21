@@ -24,8 +24,11 @@ import {
   TabsProps,
 } from "antd";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Homepage = () => {
+  const navigate = useNavigate();
+
   const [form] = Form.useForm();
   const { useBreakpoint } = Grid;
   const screens = useBreakpoint();
@@ -45,6 +48,8 @@ const Homepage = () => {
     from: "",
     to: "",
   });
+
+  const [hoveredId, setHoveredId] = useState<string>("");
 
   const items: TabsProps["items"] = [
     {
@@ -345,6 +350,7 @@ const Homepage = () => {
               }}
             >
               {data.map((item) => {
+                const isCurrentCardHovered = hoveredId === item._id;
                 return (
                   <div
                     key={item._id}
@@ -357,8 +363,20 @@ const Homepage = () => {
                       borderRadius: "5px",
                       marginRight: "10px",
                       marginBottom: "6px",
-                      boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                      cursor: "pointer",
+                      transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                      transform: isCurrentCardHovered
+                        ? "translateY(-8px)"
+                        : "translateY(0)",
+                      boxShadow: isCurrentCardHovered
+                        ? "0 12px 20px rgba(0, 0, 0, 0.15)"
+                        : "0 4px 6px rgba(0, 0, 0, 0.1)",
                     }}
+                    onClick={() => {
+                      navigate(`/book/${item._id}`);
+                    }}
+                    onMouseEnter={() => setHoveredId(item._id)}
+                    onMouseLeave={() => setHoveredId("")}
                   >
                     <div style={{ display: "flex", justifyContent: "center" }}>
                       <div

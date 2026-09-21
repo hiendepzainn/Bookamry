@@ -3,12 +3,15 @@ import {
   PlusOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
-import { Col, Divider, Rate, Row, Space } from "antd";
+import { Col, Divider, Grid, Rate, Row, Space } from "antd";
 import ImageGallery, { GalleryItem } from "react-image-gallery";
-import "../../node_modules/react-image-gallery/styles/image-gallery.css";
+import "react-image-gallery/styles/image-gallery.css";
 import { useParams } from "react-router-dom";
 
 const BookDetails = () => {
+  const { useBreakpoint } = Grid;
+  const screens = useBreakpoint();
+
   const params = useParams();
   console.log(params.id);
 
@@ -30,13 +33,13 @@ const BookDetails = () => {
   return (
     <div
       style={{
-        margin: "20px 30px",
+        margin: screens.md ? "20px 30px" : "10px 10px",
         boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
         padding: "20px 20px",
       }}
     >
       <Row gutter={24}>
-        <Col style={{}} span={10}>
+        <Col xs={24} sm={24} md={10}>
           <ImageGallery
             items={images}
             showPlayButton={false}
@@ -45,7 +48,9 @@ const BookDetails = () => {
           />
         </Col>
 
-        <Col style={{}} span={14}>
+        {screens.md ? <></> : <Divider style={{ margin: "15px 0px" }} />}
+
+        <Col xs={24} sm={24} md={14}>
           <div>
             Tác giả: <a>Robert Kiyosaki</a>
           </div>
@@ -64,12 +69,12 @@ const BookDetails = () => {
 
           <div
             style={{
-              fontSize: "28px",
+              fontSize: screens.md ? "28px" : "24px",
               fontWeight: "600",
               color: "#EE4D2D",
-              padding: "20px 16px",
+              padding: screens.md ? "20px 16px" : "10px 14px",
               backgroundColor: "#F9F9F9",
-              margin: "10px 0px 20px",
+              margin: screens.md ? "10px 0px 20px" : "10px 0px 10px",
             }}
           >
             960.000 đ
@@ -77,10 +82,10 @@ const BookDetails = () => {
 
           <div>
             <Row>
-              <Col span={4}>
+              <Col lg={4} sm={6} xs={8}>
                 <span>Vận chuyển</span>
               </Col>
-              <Col span={20}>
+              <Col lg={20} sm={18} xs={16}>
                 <span>Miễn phí vận chuyển</span>
               </Col>
             </Row>
@@ -92,11 +97,11 @@ const BookDetails = () => {
                 margin: "20px 0px",
               }}
             >
-              <Col span={4}>
+              <Col lg={4} sm={6} xs={8}>
                 <span>Số lượng</span>
               </Col>
 
-              <Col span={20}>
+              <Col lg={20} sm={18} xs={16}>
                 <button
                   style={{
                     width: "30px",
