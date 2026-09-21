@@ -1,7 +1,6 @@
 import { createRoot } from "react-dom/client";
 import "styles/global.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import BooksPage from "pages/books";
 import AboutPage from "pages/about";
 import LoginPage from "pages/login";
 import RegisterPage from "pages/register";
@@ -17,6 +16,7 @@ import LayoutAdmin from "./layout/layoutAdmin";
 import BooksPageAdmin from "./pages/admin/bookManaging/books";
 import UsersPageAdmin from "./pages/admin/userManaging/users";
 import HomepageAdmin from "./pages/admin/homepage";
+import BookDetails from "pages/books";
 
 const router = createBrowserRouter([
   {
@@ -27,8 +27,8 @@ const router = createBrowserRouter([
       { index: true, element: <Homepage /> },
 
       {
-        path: "books",
-        element: <BooksPage />,
+        path: "book/:id",
+        element: <BookDetails />,
       },
 
       {
