@@ -25,6 +25,7 @@ import {
 } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import FilterDrawer from "./filterDrawer";
 
 const Homepage = () => {
   const navigate = useNavigate();
@@ -36,6 +37,8 @@ const Homepage = () => {
   const [categoryList, setCategoryList] = useState<IBookCategory[]>([]);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
   const [total, setTotal] = useState(0);
   const [current, setCurrent] = useState(1);
@@ -202,7 +205,13 @@ const Homepage = () => {
         >
           <Form form={form} onFinish={onFinish}>
             <div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <div>
                   <FilterTwoTone />
                   <span
@@ -216,7 +225,9 @@ const Homepage = () => {
                   </span>
                 </div>
 
-                <ReloadOutlined onClick={resetFilter} />
+                <Button>
+                  <ReloadOutlined onClick={resetFilter} />
+                </Button>
               </div>
             </div>
 
@@ -328,7 +339,7 @@ const Homepage = () => {
 
         <Col
           style={{
-            margin: "30px 0px 10px",
+            margin: screens.xs ? "10px 0px" : "30px 0px 10px",
             padding: screens.xs ? "8px 0px 8px 10px" : "8px 0px 8px 30px",
             boxShadow: "rgba(147, 137, 137, 0.2) 0px 7px 29px 0px",
             borderRadius: "8px",
@@ -340,6 +351,17 @@ const Homepage = () => {
           <div>
             <Tabs defaultActiveKey="1" items={items} onChange={changeTab} />
           </div>
+
+          {screens.xs ? (
+            <div style={{ margin: "-10px 0px 6px" }}>
+              <Button onClick={() => setIsFilterDrawerOpen(true)}>
+                <FilterTwoTone />
+                <span> Lọc</span>
+              </Button>
+            </div>
+          ) : (
+            <></>
+          )}
 
           <Spin spinning={isLoading}>
             <div
@@ -457,6 +479,20 @@ const Homepage = () => {
           />
         </Col>
       </Row>
+
+      {screens.xs ? (
+        <FilterDrawer
+          isFilterDrawerOpen={isFilterDrawerOpen}
+          setIsFilterDrawerOpen={setIsFilterDrawerOpen}
+          form={form}
+          onFinish={onFinish}
+          resetFilter={resetFilter}
+          changeCheckboxGroup={changeCheckboxGroup}
+          categoryList={categoryList}
+        />
+      ) : (
+        <></>
+      )}
     </>
   );
 };
