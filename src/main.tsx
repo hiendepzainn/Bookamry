@@ -16,7 +16,7 @@ import LayoutAdmin from "./layout/layoutAdmin";
 import BooksPageAdmin from "./pages/admin/bookManaging/books";
 import UsersPageAdmin from "./pages/admin/userManaging/users";
 import HomepageAdmin from "./pages/admin/homepage";
-import BookDetails from "pages/books";
+import BookDetails from "@/pages/book";
 
 const router = createBrowserRouter([
   {

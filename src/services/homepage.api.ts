@@ -29,4 +29,9 @@ const getBooksHomepage = (
   );
 };
 
-export { getBooksHomepage };
+const getBookDetailsByID = (id: string) => {
+  const url = `/api/v1/book/${id}`;
+  return instance1.get<unknown, IBackendResponse<IBookTable>>(url);
+};
+
+export { getBooksHomepage, getBookDetailsByID };

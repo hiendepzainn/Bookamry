@@ -1,9 +1,12 @@
+import { formatPrice } from "@/services/helpers";
+import { getBookDetailsByID } from "@/services/homepage.api";
 import {
   MinusOutlined,
   PlusOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
 import { Col, Divider, Grid, Rate, Row, Space } from "antd";
+import { useEffect, useState } from "react";
 import ImageGallery, { GalleryItem } from "react-image-gallery";
 import "react-image-gallery/styles/image-gallery.css";
 import { useParams } from "react-router-dom";
@@ -13,22 +16,52 @@ const BookDetails = () => {
   const screens = useBreakpoint();
 
   const params = useParams();
-  console.log(params.id);
 
-  const images: GalleryItem[] = [
-    {
-      original: "https://picsum.photos/id/1018/1000/600/",
-      thumbnail: "https://picsum.photos/id/1018/250/150/",
-    },
-    {
-      original: "https://picsum.photos/id/1015/1000/600/",
-      thumbnail: "https://picsum.photos/id/1015/250/150/",
-    },
-    {
-      original: "https://picsum.photos/id/1019/1000/600/",
-      thumbnail: "https://picsum.photos/id/1019/250/150/",
-    },
-  ];
+  const [book, setBook] = useState<IBookTable>({
+    __v: 0,
+    _id: "",
+    author: "",
+    category: "",
+    createdAt: "",
+    mainText: "",
+    price: 0,
+    quantity: 0,
+    slider: [],
+    sold: 0,
+    thumbnail: "",
+    updatedAt: "",
+  });
+
+  const [imageList, setImageList] = useState<GalleryItem[]>([]);
+
+  const fetchBookInfo = async (id: string) => {
+    const res = await getBookDetailsByID(id);
+    if (res.data) {
+      setBook(res.data);
+      const listImage: GalleryItem[] = [];
+
+      listImage.push({
+        original: `${import.meta.env.VITE_BACKEND_URL}/images/book/${res.data.thumbnail}`,
+        thumbnail: `${import.meta.env.VITE_BACKEND_URL}/images/book/${res.data.thumbnail}`,
+      });
+
+      res.data.slider.forEach((item) => {
+        listImage.push({
+          original: `${import.meta.env.VITE_BACKEND_URL}/images/book/${item}`,
+          thumbnail: `${import.meta.env.VITE_BACKEND_URL}/images/book/${item}`,
+        });
+      });
+
+      setImageList(listImage);
+    }
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (params.id) fetchBookInfo(params.id);
+    }, 300);
+    // if (params.id) fetchBookInfo(params.id);
+  }, []);
 
   return (
     <div
@@ -41,7 +74,7 @@ const BookDetails = () => {
       <Row gutter={24}>
         <Col xs={24} sm={24} md={10}>
           <ImageGallery
-            items={images}
+            items={imageList}
             showPlayButton={false}
             showFullscreenButton={false}
             showNav={false}
@@ -52,11 +85,11 @@ const BookDetails = () => {
 
         <Col xs={24} sm={24} md={14}>
           <div>
-            Tác giả: <a>Robert Kiyosaki</a>
+            Tác giả: <a>{book.author}</a>
           </div>
 
           <div style={{ fontSize: "20px", margin: "5px 0px" }}>
-            Tư Duy Về Tiền Bạc - Lựa Chọn Tài Chính Đúng Đắn Và Sáng Suốt
+            {book.mainText}
           </div>
 
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -64,7 +97,7 @@ const BookDetails = () => {
 
             <Divider type="vertical" />
 
-            <div>45 đã bán</div>
+            <div>{book.sold ? `${book.sold}` : "0"} đã bán</div>
           </div>
 
           <div
@@ -77,7 +110,7 @@ const BookDetails = () => {
               margin: screens.md ? "10px 0px 20px" : "10px 0px 10px",
             }}
           >
-            960.000 đ
+            {formatPrice(book.price)}
           </div>
 
           <div>
