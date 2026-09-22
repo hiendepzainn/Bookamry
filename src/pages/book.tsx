@@ -5,7 +5,7 @@ import {
   PlusOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
-import { Col, Divider, Grid, Rate, Row, Space } from "antd";
+import { Col, Divider, Grid, Rate, Row, Skeleton, Space } from "antd";
 import { useEffect, useState } from "react";
 import ImageGallery, { GalleryItem } from "react-image-gallery";
 import "react-image-gallery/styles/image-gallery.css";
@@ -34,6 +34,8 @@ const BookDetails = () => {
 
   const [imageList, setImageList] = useState<GalleryItem[]>([]);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const fetchBookInfo = async (id: string) => {
     const res = await getBookDetailsByID(id);
     if (res.data) {
@@ -53,14 +55,12 @@ const BookDetails = () => {
       });
 
       setImageList(listImage);
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      if (params.id) fetchBookInfo(params.id);
-    }, 300);
-    // if (params.id) fetchBookInfo(params.id);
+    if (params.id) fetchBookInfo(params.id);
   }, []);
 
   return (
@@ -73,130 +73,153 @@ const BookDetails = () => {
     >
       <Row gutter={24}>
         <Col xs={24} sm={24} md={10}>
-          <ImageGallery
-            items={imageList}
-            showPlayButton={false}
-            showFullscreenButton={false}
-            showNav={false}
-          />
+          {isLoading ? (
+            <Skeleton.Input
+              block
+              active
+              style={{ width: "100%", height: 350 }}
+            />
+          ) : (
+            <ImageGallery
+              items={imageList}
+              showPlayButton={false}
+              showFullscreenButton={false}
+              showNav={false}
+            />
+          )}
         </Col>
 
         {screens.md ? <></> : <Divider style={{ margin: "15px 0px" }} />}
 
         <Col xs={24} sm={24} md={14}>
-          <div>
-            Tác giả: <a>{book.author}</a>
-          </div>
-
-          <div style={{ fontSize: "20px", margin: "5px 0px" }}>
-            {book.mainText}
-          </div>
-
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <Rate style={{ fontSize: "15px" }} disabled defaultValue={5} />
-
-            <Divider type="vertical" />
-
-            <div>{book.sold ? `${book.sold}` : "0"} đã bán</div>
-          </div>
-
-          <div
-            style={{
-              fontSize: screens.md ? "28px" : "24px",
-              fontWeight: "600",
-              color: "#EE4D2D",
-              padding: screens.md ? "20px 16px" : "10px 14px",
-              backgroundColor: "#F9F9F9",
-              margin: screens.md ? "10px 0px 20px" : "10px 0px 10px",
-            }}
-          >
-            {formatPrice(book.price)}
-          </div>
-
-          <div>
-            <Row>
-              <Col lg={4} sm={6} xs={8}>
-                <span>Vận chuyển</span>
-              </Col>
-              <Col lg={20} sm={18} xs={16}>
-                <span>Miễn phí vận chuyển</span>
-              </Col>
-            </Row>
-
-            <Row
-              style={{
-                display: "flex",
-                alignItems: "center",
-                margin: "20px 0px",
-              }}
-            >
-              <Col lg={4} sm={6} xs={8}>
-                <span>Số lượng</span>
-              </Col>
-
-              <Col lg={20} sm={18} xs={16}>
-                <button
-                  style={{
-                    width: "30px",
-                    height: "30px",
-                    backgroundColor: "#fff",
-                    border: "1px solid #ddd",
-                  }}
-                >
-                  <MinusOutlined />
-                </button>
-                <button
-                  style={{
-                    width: "45px",
-                    height: "30px",
-                    backgroundColor: "#fff",
-                    border: "1px solid #ddd",
-                  }}
-                >
-                  1
-                </button>
-                <button
-                  style={{
-                    width: "30px",
-                    height: "30px",
-                    backgroundColor: "#fff",
-                    border: "1px solid #ddd",
-                  }}
-                >
-                  <PlusOutlined />
-                </button>
-              </Col>
-            </Row>
-
-            <div>
-              <Space size={"middle"}>
-                <button
-                  style={{
-                    padding: "10px 15px",
-                    backgroundColor: "#FFEDEB",
-                    border: "1px solid #EE4D2D",
-                    borderRadius: "3px",
-                    color: "#EE4D2D",
-                  }}
-                >
-                  <ShoppingCartOutlined />
-                  <span> Thêm vào giỏ hàng</span>
-                </button>
-
-                <button
-                  style={{
-                    padding: "10px 15px",
-                    backgroundColor: "#EE4D2D",
-                    border: "1px solid #EE4D2D",
-                    borderRadius: "3px",
-                    color: "#fff",
-                  }}
-                >
-                  Mua ngay
-                </button>
+          {isLoading ? (
+            <>
+              <Skeleton active />
+              <br />
+              <Skeleton active />
+              <br />
+              <Space>
+                <Skeleton.Input active size={"default"} />
+                <Skeleton.Input active size={"default"} />
               </Space>
+            </>
+          ) : (
+            <div>
+              <div>
+                Tác giả: <a>{book.author}</a>
+              </div>
+
+              <div style={{ fontSize: "20px", margin: "5px 0px" }}>
+                {book.mainText}
+              </div>
+
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <Rate style={{ fontSize: "15px" }} disabled defaultValue={5} />
+
+                <Divider type="vertical" />
+
+                <div>{book.sold ? `${book.sold}` : "0"} đã bán</div>
+              </div>
+
+              <div
+                style={{
+                  fontSize: screens.md ? "28px" : "24px",
+                  fontWeight: "600",
+                  color: "#EE4D2D",
+                  padding: screens.md ? "20px 16px" : "10px 14px",
+                  backgroundColor: "#F9F9F9",
+                  margin: screens.md ? "10px 0px 20px" : "10px 0px 10px",
+                }}
+              >
+                {formatPrice(book.price)}
+              </div>
+
+              <div>
+                <Row>
+                  <Col lg={4} sm={6} xs={8}>
+                    <span>Vận chuyển</span>
+                  </Col>
+                  <Col lg={20} sm={18} xs={16}>
+                    <span>Miễn phí vận chuyển</span>
+                  </Col>
+                </Row>
+
+                <Row
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    margin: "20px 0px",
+                  }}
+                >
+                  <Col lg={4} sm={6} xs={8}>
+                    <span>Số lượng</span>
+                  </Col>
+
+                  <Col lg={20} sm={18} xs={16}>
+                    <button
+                      style={{
+                        width: "30px",
+                        height: "30px",
+                        backgroundColor: "#fff",
+                        border: "1px solid #ddd",
+                      }}
+                    >
+                      <MinusOutlined />
+                    </button>
+                    <button
+                      style={{
+                        width: "45px",
+                        height: "30px",
+                        backgroundColor: "#fff",
+                        border: "1px solid #ddd",
+                      }}
+                    >
+                      1
+                    </button>
+                    <button
+                      style={{
+                        width: "30px",
+                        height: "30px",
+                        backgroundColor: "#fff",
+                        border: "1px solid #ddd",
+                      }}
+                    >
+                      <PlusOutlined />
+                    </button>
+                  </Col>
+                </Row>
+
+                <div>
+                  <Space size={"middle"}>
+                    <button
+                      style={{
+                        padding: "10px 15px",
+                        backgroundColor: "#FFEDEB",
+                        border: "1px solid #EE4D2D",
+                        borderRadius: "3px",
+                        color: "#EE4D2D",
+                      }}
+                    >
+                      <ShoppingCartOutlined />
+                      <span> Thêm vào giỏ hàng</span>
+                    </button>
+
+                    <button
+                      style={{
+                        padding: "10px 15px",
+                        backgroundColor: "#EE4D2D",
+                        border: "1px solid #EE4D2D",
+                        borderRadius: "3px",
+                        color: "#fff",
+                      }}
+                    >
+                      Mua ngay
+                    </button>
+                  </Space>
+                </div>
+              </div>
             </div>
-          </div>
+          )}
         </Col>
       </Row>
     </div>
