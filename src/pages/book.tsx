@@ -34,7 +34,19 @@ const BookDetails = () => {
 
   const [imageList, setImageList] = useState<GalleryItem[]>([]);
 
+  const [countQuantity, setCountQuantity] = useState<number>(1);
+
   const [isLoading, setIsLoading] = useState(true);
+
+  const decreaseQuantity = () => {
+    if (countQuantity === 1) return;
+    setCountQuantity(countQuantity - 1);
+  };
+
+  const increaseQuantity = () => {
+    if (countQuantity === book.quantity) return;
+    setCountQuantity(countQuantity + 1);
+  };
 
   const fetchBookInfo = async (id: string) => {
     const res = await getBookDetailsByID(id);
@@ -162,7 +174,9 @@ const BookDetails = () => {
                         height: "30px",
                         backgroundColor: "#fff",
                         border: "1px solid #ddd",
+                        cursor: "pointer",
                       }}
+                      onClick={decreaseQuantity}
                     >
                       <MinusOutlined />
                     </button>
@@ -174,7 +188,7 @@ const BookDetails = () => {
                         border: "1px solid #ddd",
                       }}
                     >
-                      1
+                      {countQuantity}
                     </button>
                     <button
                       style={{
@@ -182,7 +196,9 @@ const BookDetails = () => {
                         height: "30px",
                         backgroundColor: "#fff",
                         border: "1px solid #ddd",
+                        cursor: "pointer",
                       }}
+                      onClick={increaseQuantity}
                     >
                       <PlusOutlined />
                     </button>
