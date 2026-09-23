@@ -2,13 +2,26 @@ import { useContext } from "react";
 import { MyContext } from "./context/app.context";
 import type { MenuProps } from "antd";
 import { Link } from "react-router-dom";
-import { App, Avatar, Badge, Button, Dropdown, Grid, Input, Space } from "antd";
+import {
+  App,
+  Avatar,
+  Badge,
+  Button,
+  Col,
+  Dropdown,
+  Grid,
+  Input,
+  Popover,
+  Row,
+  Space,
+} from "antd";
 import {
   SearchOutlined,
   ShoppingCartOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { logout } from "@/services/auth.api";
+import { formatPrice } from "@/services/helpers";
 
 const AppHeader = () => {
   const { useBreakpoint } = Grid;
@@ -136,6 +149,78 @@ const AppHeader = () => {
     },
   };
 
+  const contentPopover = () => {
+    return (
+      <div style={{ width: "25vw" }}>
+        {cart.map((item) => {
+          return (
+            <Row
+              gutter={18}
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                alignItems: "center",
+              }}
+            >
+              <Col span={4}>
+                <div
+                  style={{
+                    width: "100%",
+                    aspectRatio: "1/1",
+                  }}
+                >
+                  <img
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "contain",
+                    }}
+                    src={`${import.meta.env.VITE_BACKEND_URL}/images/book/${item.detail.thumbnail}`}
+                    alt="image"
+                  />
+                </div>
+              </Col>
+              <Col
+                style={{
+                  display: "-webkit-box",
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: "vertical",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+                span={15}
+              >
+                {item.detail.mainText}
+              </Col>
+              <Col style={{ color: "#EE4D2D", fontWeight: "500" }} span={5}>
+                {formatPrice(item.detail.price)}
+              </Col>
+            </Row>
+          );
+        })}
+        {cart.length === 0 ? (
+          <></>
+        ) : (
+          <div style={{ display: "flex", justifyContent: "end" }}>
+            <button
+              style={{
+                margin: "5px 0px",
+                padding: "10px 15px",
+                backgroundColor: "#EE4D2D",
+                border: "1px solid #EE4D2D",
+                borderRadius: "3px",
+                color: "#fff",
+                cursor: "pointer",
+              }}
+            >
+              Xem giỏ hàng
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <header style={styles.header}>
       {/* LEFT: Logo & Brand Name */}
@@ -161,11 +246,25 @@ const AppHeader = () => {
       {/* RIGHT: Cart & User Info */}
       <div style={styles.rightSection}>
         {/* Cart Section */}
-        <Badge count={cart.length} offset={[-2, 4]} size="small">
-          <Link to="/cart">
-            <ShoppingCartOutlined style={styles.cartIcon} />
-          </Link>
-        </Badge>
+        <Popover
+          placement="bottomRight"
+          title={
+            cart.length === 0 ? (
+              <div style={{ textAlign: "center", margin: "10px 0px 0px" }}>
+                Hiện tại Giỏ hàng đang trống
+              </div>
+            ) : (
+              "Sản phẩm mới thêm"
+            )
+          }
+          content={contentPopover}
+        >
+          <Badge count={cart.length} offset={[-2, 4]} size="small">
+            <Link to="/cart">
+              <ShoppingCartOutlined style={styles.cartIcon} />
+            </Link>
+          </Badge>
+        </Popover>
 
         {/* User Info Section (Hover Dropdown) */}
         {!authenticated ? (
