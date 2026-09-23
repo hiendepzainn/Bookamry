@@ -17,6 +17,7 @@ import BooksPageAdmin from "./pages/admin/bookManaging/books";
 import UsersPageAdmin from "./pages/admin/userManaging/users";
 import HomepageAdmin from "./pages/admin/homepage";
 import BookDetails from "@/pages/book";
+import Cart from "./pages/cart";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,15 @@ const router = createBrowserRouter([
       {
         path: "about",
         element: <AboutPage />,
+      },
+
+      {
+        path: "cart",
+        element: (
+          <AuthenticationRoute>
+            <Cart />
+          </AuthenticationRoute>
+        ),
       },
 
       {

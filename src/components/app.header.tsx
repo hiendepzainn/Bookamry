@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { MyContext } from "./context/app.context";
 import type { MenuProps } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   App,
   Avatar,
@@ -27,9 +27,11 @@ const AppHeader = () => {
   const { useBreakpoint } = Grid;
   const screens = useBreakpoint();
 
+  const navigate = useNavigate();
+
   const { message } = App.useApp();
 
-  const { user, authenticated, setAuthenticated, setUser, cart } =
+  const { user, authenticated, setAuthenticated, setUser, cart, setCart } =
     useContext(MyContext);
 
   const handleLogout = async () => {
@@ -37,6 +39,8 @@ const AppHeader = () => {
 
     if (res.data) {
       localStorage.removeItem("access_token");
+      localStorage.removeItem("cart");
+      setCart([]);
 
       setAuthenticated(false);
       setUser({
@@ -203,6 +207,9 @@ const AppHeader = () => {
         ) : (
           <div style={{ display: "flex", justifyContent: "end" }}>
             <button
+              onClick={() => {
+                navigate("/cart");
+              }}
               style={{
                 margin: "5px 0px",
                 padding: "10px 15px",
@@ -249,20 +256,28 @@ const AppHeader = () => {
         <Popover
           placement="bottomRight"
           title={
-            cart.length === 0 ? (
+            authenticated === false ? (
               <div style={{ textAlign: "center", margin: "10px 0px 0px" }}>
-                Hiện tại Giỏ hàng đang trống
+                Vui lòng đăng nhập để thêm sản phẩm
               </div>
             ) : (
-              "Sản phẩm mới thêm"
+              <>
+                {cart.length === 0 ? (
+                  <div style={{ textAlign: "center", margin: "10px 0px 0px" }}>
+                    Hiện tại Giỏ hàng đang trống
+                  </div>
+                ) : (
+                  "Sản phẩm mới thêm"
+                )}
+              </>
             )
           }
           content={contentPopover}
         >
           <Badge count={cart.length} offset={[-2, 4]} size="small">
-            <Link to="/cart">
+            <span>
               <ShoppingCartOutlined style={styles.cartIcon} />
-            </Link>
+            </span>
           </Badge>
         </Popover>
 

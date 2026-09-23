@@ -10,10 +10,12 @@ import { App, Col, Divider, Grid, Rate, Row, Skeleton, Space } from "antd";
 import { useContext, useEffect, useState } from "react";
 import ImageGallery, { GalleryItem } from "react-image-gallery";
 import "react-image-gallery/styles/image-gallery.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const BookDetails = () => {
-  const { setCart } = useContext(MyContext);
+  const { setCart, authenticated } = useContext(MyContext);
+
+  const navigate = useNavigate();
 
   const { message } = App.useApp();
 
@@ -269,8 +271,12 @@ const BookDetails = () => {
                         cursor: "pointer",
                       }}
                       onClick={() => {
-                        addBookToCart();
-                        message.success("Đã thêm sản phẩm vào Giỏ hàng");
+                        if (!authenticated) {
+                          navigate("/login");
+                        } else {
+                          addBookToCart();
+                          message.success("Đã thêm sản phẩm vào Giỏ hàng");
+                        }
                       }}
                     >
                       <ShoppingCartOutlined />
