@@ -15,9 +15,8 @@ const AppHeader = () => {
   const screens = useBreakpoint();
 
   const { message } = App.useApp();
-  const CART_ITEM_COUNT = 3;
 
-  const { user, authenticated, setAuthenticated, setUser } =
+  const { user, authenticated, setAuthenticated, setUser, cart } =
     useContext(MyContext);
 
   const handleLogout = async () => {
@@ -162,7 +161,7 @@ const AppHeader = () => {
       {/* RIGHT: Cart & User Info */}
       <div style={styles.rightSection}>
         {/* Cart Section */}
-        <Badge count={CART_ITEM_COUNT} offset={[-2, 4]} size="small">
+        <Badge count={cart.length} offset={[-2, 4]} size="small">
           <Link to="/cart">
             <ShoppingCartOutlined style={styles.cartIcon} />
           </Link>

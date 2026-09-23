@@ -1,3 +1,4 @@
+import { MyContext } from "@/components/context/app.context";
 import { formatPrice } from "@/services/helpers";
 import { getBookDetailsByID } from "@/services/homepage.api";
 import {
@@ -5,13 +6,17 @@ import {
   PlusOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
-import { Col, Divider, Grid, Rate, Row, Skeleton, Space } from "antd";
-import { useEffect, useState } from "react";
+import { App, Col, Divider, Grid, Rate, Row, Skeleton, Space } from "antd";
+import { useContext, useEffect, useState } from "react";
 import ImageGallery, { GalleryItem } from "react-image-gallery";
 import "react-image-gallery/styles/image-gallery.css";
 import { useParams } from "react-router-dom";
 
 const BookDetails = () => {
+  const { setCart } = useContext(MyContext);
+
+  const { message } = App.useApp();
+
   const { useBreakpoint } = Grid;
   const screens = useBreakpoint();
 
@@ -46,6 +51,53 @@ const BookDetails = () => {
   const increaseQuantity = () => {
     if (countQuantity === book.quantity) return;
     setCountQuantity(countQuantity + 1);
+  };
+
+  const addBookToCart = () => {
+    const cart = localStorage.getItem("cart");
+    if (!cart) {
+      //create cart
+      const newCart: IBookInCart[] = [];
+
+      //insert
+      newCart.push({
+        id: book._id,
+        quantity: countQuantity,
+        detail: book,
+      });
+
+      //storage
+      localStorage.setItem("cart", JSON.stringify(newCart));
+
+      //sync React Context
+      setCart(newCart);
+
+      //return
+      return;
+    }
+    //get Cart from localStorage
+    const newCart: IBookInCart[] = JSON.parse(cart);
+
+    // find Book in cart?
+    const foundIndex = newCart.findIndex((item) => item.id === book._id);
+
+    // if yes, update
+    if (foundIndex !== -1) {
+      newCart[foundIndex].quantity += countQuantity;
+    } else {
+      // if no, insert
+      newCart.push({
+        id: book._id,
+        quantity: countQuantity,
+        detail: book,
+      });
+    }
+
+    // storage
+    localStorage.setItem("cart", JSON.stringify(newCart));
+
+    //sync React Context
+    setCart(newCart);
   };
 
   const fetchBookInfo = async (id: string) => {
@@ -214,6 +266,11 @@ const BookDetails = () => {
                         border: "1px solid #EE4D2D",
                         borderRadius: "3px",
                         color: "#EE4D2D",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        addBookToCart();
+                        message.success("Đã thêm sản phẩm vào Giỏ hàng");
                       }}
                     >
                       <ShoppingCartOutlined />

@@ -20,6 +20,8 @@ export const MyContext = createContext<IContext>({
   setUser: () => {},
   loadingApp: false,
   setLoadingApp: () => {},
+  cart: [],
+  setCart: () => {},
 });
 
 const AppContext = (props: IProps) => {
@@ -33,9 +35,13 @@ const AppContext = (props: IProps) => {
   });
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [loadingApp, setLoadingApp] = useState<boolean>(false);
+  const [cart, setCart] = useState<IBookInCart[]>([]);
 
   const fetchDataUser = async () => {
     setLoadingApp(true);
+
+    const cart = localStorage.getItem("cart");
+    if (cart) setCart(JSON.parse(cart));
 
     const res = await fetchAccount();
 
@@ -65,6 +71,8 @@ const AppContext = (props: IProps) => {
             setAuthenticated,
             loadingApp,
             setLoadingApp,
+            cart,
+            setCart,
           }}
         >
           {props.children}

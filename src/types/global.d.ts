@@ -7,6 +7,8 @@ declare global {
     setAuthenticated: (value: boolean) => void;
     setUser: (user: IDataLoginUser) => void;
     setLoadingApp: (value: boolean) => void;
+    cart: IBookInCart[];
+    setCart: (value: IBookInCart[]) => void;
   }
   //--------CONTEXT---------
 
