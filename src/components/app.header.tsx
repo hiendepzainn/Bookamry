@@ -253,33 +253,46 @@ const AppHeader = () => {
       {/* RIGHT: Cart & User Info */}
       <div style={styles.rightSection}>
         {/* Cart Section */}
-        <Popover
-          placement="bottomRight"
-          title={
-            authenticated === false ? (
-              <div style={{ textAlign: "center", margin: "10px 0px 0px" }}>
-                Vui lòng đăng nhập để thêm sản phẩm
-              </div>
-            ) : (
-              <>
-                {cart.length === 0 ? (
-                  <div style={{ textAlign: "center", margin: "10px 0px 0px" }}>
-                    Hiện tại Giỏ hàng đang trống
-                  </div>
-                ) : (
-                  "Sản phẩm mới thêm"
-                )}
-              </>
-            )
-          }
-          content={contentPopover}
-        >
-          <Badge count={cart.length} offset={[-2, 4]} size="small">
-            <span>
-              <ShoppingCartOutlined style={styles.cartIcon} />
-            </span>
-          </Badge>
-        </Popover>
+
+        {screens.xs ? (
+          <Link to={"/cart"}>
+            <Badge count={cart.length} offset={[-2, 4]} size="small">
+              <span>
+                <ShoppingCartOutlined style={styles.cartIcon} />
+              </span>
+            </Badge>
+          </Link>
+        ) : (
+          <Popover
+            placement="bottomRight"
+            title={
+              authenticated === false ? (
+                <div style={{ textAlign: "center", margin: "10px 0px 0px" }}>
+                  Vui lòng đăng nhập để thêm sản phẩm
+                </div>
+              ) : (
+                <>
+                  {cart.length === 0 ? (
+                    <div
+                      style={{ textAlign: "center", margin: "10px 0px 0px" }}
+                    >
+                      Hiện tại Giỏ hàng đang trống
+                    </div>
+                  ) : (
+                    "Sản phẩm mới thêm"
+                  )}
+                </>
+              )
+            }
+            content={contentPopover}
+          >
+            <Badge count={cart.length} offset={[-2, 4]} size="small">
+              <span>
+                <ShoppingCartOutlined style={styles.cartIcon} />
+              </span>
+            </Badge>
+          </Popover>
+        )}
 
         {/* User Info Section (Hover Dropdown) */}
         {!authenticated ? (
