@@ -159,6 +159,7 @@ const AppHeader = () => {
         {cart.map((item) => {
           return (
             <Row
+              key={item.id}
               gutter={18}
               style={{
                 display: "flex",

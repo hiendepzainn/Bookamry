@@ -5,13 +5,48 @@ import { Col, Divider, InputNumber, Row, Space } from "antd";
 import { useContext } from "react";
 
 const Cart = () => {
-  const { cart } = useContext(MyContext);
+  const { cart, setCart } = useContext(MyContext);
+
+  const changeInputNumber = (id: string, value: number | null) => {
+    if (value == null) return;
+
+    const updatedCart = cart.map((item) => {
+      if (item.id === id) {
+        return { ...item, quantity: value };
+      }
+      return item;
+    });
+
+    setCart(updatedCart);
+
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
+
+  const getTotalFromCart = (cart: IBookInCart[]) => {
+    let total: number = 0;
+
+    cart.forEach((item) => {
+      total += item.quantity * item.detail.price;
+    });
+
+    return total;
+  };
+
+  const deleteBookById = (id: string) => {
+    const updatedCart = cart.filter((item) => item.id !== id);
+
+    setCart(updatedCart);
+
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
+
   return (
     <Row style={{ backgroundColor: "#ddd", padding: "15px 40px" }}>
       <Col span={17}>
         {cart.map((item) => {
           return (
             <Row
+              key={item.id}
               style={{
                 backgroundColor: "#fff",
                 margin: "0px 0px 12px",
@@ -71,6 +106,7 @@ const Cart = () => {
                   min={1}
                   max={item.detail.quantity}
                   value={item.quantity}
+                  onChange={(value) => changeInputNumber(item.id, value)}
                 />
               </Col>
               <Col
@@ -84,7 +120,7 @@ const Cart = () => {
                 <Space>
                   <span>Tổng:</span>
                   <span style={{ fontSize: "15px", fontWeight: "500" }}>
-                    423.934 đ
+                    {formatPrice(item.detail.price * item.quantity)}
                   </span>
                 </Space>
               </Col>
@@ -96,7 +132,10 @@ const Cart = () => {
                 }}
                 span={1}
               >
-                <DeleteTwoTone twoToneColor="#ed183f" />
+                <DeleteTwoTone
+                  twoToneColor="#ed183f"
+                  onClick={() => deleteBookById(item.id)}
+                />
               </Col>
             </Row>
           );
@@ -119,7 +158,9 @@ const Cart = () => {
           }}
         >
           <span>Tạm tính</span>
-          <span style={{ fontSize: "16px" }}>624.123 đ</span>
+          <span style={{ fontSize: "16px" }}>
+            {formatPrice(getTotalFromCart(cart))}
+          </span>
         </div>
 
         <Divider />
@@ -133,27 +174,30 @@ const Cart = () => {
         >
           <span>Tổng tiền</span>
           <span style={{ fontSize: "25px", color: "#EE4D2D" }}>
-            1.324.123 đ
+            {formatPrice(getTotalFromCart(cart))}
           </span>
         </div>
 
         <Divider />
 
         <div style={{ textAlign: "center" }}>
-          <button
-            style={{
-              width: "95%",
-              // margin: "0px 15px",
-              padding: "13px 15px",
-              backgroundColor: "#EE4D2D",
-              border: "1px solid #EE4D2D",
-              borderRadius: "3px",
-              color: "#fff",
-              cursor: "pointer",
-            }}
-          >
-            Mua hàng (2)
-          </button>
+          {cart.length === 0 ? (
+            <div>Hiện tại giỏ hàng đang không có sản phẩm</div>
+          ) : (
+            <button
+              style={{
+                width: "95%",
+                padding: "13px 15px",
+                backgroundColor: "#EE4D2D",
+                border: "1px solid #EE4D2D",
+                borderRadius: "3px",
+                color: "#fff",
+                cursor: "pointer",
+              }}
+            >
+              Mua hàng ({cart.length})
+            </button>
+          )}
         </div>
       </Col>
     </Row>
