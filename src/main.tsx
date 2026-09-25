@@ -1,23 +1,21 @@
 import { createRoot } from "react-dom/client";
 import "styles/global.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import AboutPage from "pages/about";
-import LoginPage from "pages/login";
-import RegisterPage from "pages/register";
+import LoginPage from "@/pages/guest/login/login";
+import RegisterPage from "@/pages/guest/register/register";
 import LayoutClient from "@/layout/layoutClient";
-import Homepage from "pages/homepage";
-import ErrorPage from "pages/error";
+import Homepage from "@/pages/guest/homepage/homepage";
+import ErrorPage from "@/components/others/error";
 import { App } from "antd";
 import AppContext from "./components/context/app.context";
-import CheckoutPage from "./pages/checkout";
 import AuthenticationRoute from "./components/auth/authentication";
 import AuthorizationRoute from "./components/auth/authorization";
 import LayoutAdmin from "./layout/layoutAdmin";
 import BooksPageAdmin from "./pages/admin/bookManaging/books";
 import UsersPageAdmin from "./pages/admin/userManaging/users";
 import HomepageAdmin from "./pages/admin/homepage";
-import BookDetails from "@/pages/book";
-import Cart from "./pages/cart";
+import BookDetails from "@/pages/guest/bookDetails/book";
+import Cart from "./pages/user/cart";
 
 const router = createBrowserRouter([
   {
@@ -33,24 +31,10 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "about",
-        element: <AboutPage />,
-      },
-
-      {
         path: "cart",
         element: (
           <AuthenticationRoute>
             <Cart />
-          </AuthenticationRoute>
-        ),
-      },
-
-      {
-        path: "checkout",
-        element: (
-          <AuthenticationRoute>
-            <CheckoutPage />
           </AuthenticationRoute>
         ),
       },

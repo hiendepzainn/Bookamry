@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { MyContext } from "./context/app.context";
+import { MyContext } from "@/components/context/app.context";
 import type { MenuProps } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import {

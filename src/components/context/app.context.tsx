@@ -1,6 +1,6 @@
 import { fetchAccount } from "@/services/auth.api";
 import React, { createContext, useEffect, useState } from "react";
-import AppLoading from "../app.loading";
+import AppLoading from "../others/app.loading";
 
 interface IProps {
   children: React.ReactNode;
