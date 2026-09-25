@@ -21,4 +21,9 @@ const createOrder = (
   return instance1.post<unknown, IBackendResponse<string>>(url, data);
 };
 
-export { createOrder };
+const getOrderList = () => {
+  const url = "/api/v1/history";
+  return instance1.get<unknown, IBackendResponse<IOrderTable[]>>(url);
+};
+
+export { createOrder, getOrderList };

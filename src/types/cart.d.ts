@@ -17,6 +17,22 @@ declare global {
     quantity: number;
     _id: string;
   }
+
+  interface IOrderTable {
+    _id: string;
+    name: string;
+    type: string;
+    email: string;
+    phone: string;
+    userId: string;
+    detail: IOrderDetail[];
+    totalPrice: number;
+    paymentStatus: string;
+    paymentRef: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  }
 }
 
 export {};

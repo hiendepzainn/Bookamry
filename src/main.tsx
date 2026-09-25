@@ -15,7 +15,8 @@ import BooksPageAdmin from "./pages/admin/bookManaging/books";
 import UsersPageAdmin from "./pages/admin/userManaging/users";
 import HomepageAdmin from "./pages/admin/homepage";
 import BookDetails from "@/pages/guest/bookDetails/book";
-import Cart from "./pages/user/cart";
+import Cart from "@/pages/user/cart/cart.tsx";
+import OrdersHistory from "./pages/user/orders/ordersHistory";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,15 @@ const router = createBrowserRouter([
         element: (
           <AuthenticationRoute>
             <Cart />
+          </AuthenticationRoute>
+        ),
+      },
+
+      {
+        path: "orderHistory",
+        element: (
+          <AuthenticationRoute>
+            <OrdersHistory />
           </AuthenticationRoute>
         ),
       },

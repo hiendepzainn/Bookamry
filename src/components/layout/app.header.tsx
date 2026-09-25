@@ -66,7 +66,7 @@ const AppHeader = () => {
     },
     {
       key: "orders",
-      label: <Link to="/orders">Lịch sử mua hàng</Link>,
+      label: <Link to="/orderHistory">Lịch sử mua hàng</Link>,
     },
     {
       type: "divider",
@@ -193,11 +193,11 @@ const AppHeader = () => {
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                 }}
-                span={15}
+                span={14}
               >
                 {item.detail.mainText}
               </Col>
-              <Col style={{ color: "#EE4D2D", fontWeight: "500" }} span={5}>
+              <Col style={{ color: "#EE4D2D", fontWeight: "500" }} span={6}>
                 {formatPrice(item.detail.price)}
               </Col>
             </Row>

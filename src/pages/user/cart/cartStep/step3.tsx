@@ -19,7 +19,9 @@ const Step3 = () => {
           <Link to={"/"}>
             <Button type="primary">Trang chủ</Button>
           </Link>,
-          <Button>Lịch sử mua hàng</Button>,
+          <Link to={"/orderHistory"}>
+            <Button>Lịch sử mua hàng</Button>
+          </Link>,
         ]}
       />
     </Col>
