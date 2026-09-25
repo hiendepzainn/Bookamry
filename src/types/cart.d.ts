@@ -4,6 +4,13 @@ declare global {
     quantity: number;
     detail: IBookTable;
   }
+
+  interface IOrderInfor {
+    paymentMethod: string;
+    name: string;
+    phone: string;
+    address: string;
+  }
 }
 
 export {};
