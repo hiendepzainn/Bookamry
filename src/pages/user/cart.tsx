@@ -3,6 +3,7 @@ import { Col, Row, Steps } from "antd";
 import { useContext, useState } from "react";
 import Step1 from "./cartStep/step1";
 import Step2 from "./cartStep/step2";
+import Step3 from "./cartStep/step3";
 
 const Cart = () => {
   const { cart, setCart } = useContext(MyContext);
@@ -64,8 +65,11 @@ const Cart = () => {
           getTotalFromCart={getTotalFromCart}
           cart={cart}
           setCurrent={setCurrent}
+          setCart={setCart}
         />
       )}
+
+      {current === 2 && <Step3 />}
     </Row>
   );
 };

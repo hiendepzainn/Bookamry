@@ -1,5 +1,7 @@
+import { createOrder } from "@/services/cart.api";
 import { formatPrice } from "@/services/helpers";
 import {
+  App,
   Button,
   Col,
   Divider,
@@ -10,27 +12,68 @@ import {
   Row,
   Space,
 } from "antd";
+import { useState } from "react";
 
 interface IProps {
   getTotalFromCart: (cart: IBookInCart[]) => number;
   cart: IBookInCart[];
   setCurrent: (value: number) => void;
+  setCart: (value: IBookInCart[]) => void;
 }
 
 const Step2 = (props: IProps) => {
-  const { getTotalFromCart, cart, setCurrent } = props;
+  const { getTotalFromCart, cart, setCurrent, setCart } = props;
 
   const [form] = Form.useForm();
 
   const { TextArea } = Input;
+
+  const { message } = App.useApp();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const optionsRadio = [
     { value: "COD", label: "Thanh toán khi nhận hàng" },
     { value: "BANKING", label: "Chuyển khoản ngân hàng" },
   ];
 
-  const onFinish: FormProps<IOrderInfor>["onFinish"] = (values) => {
-    console.log("Success:", values);
+  const onFinish: FormProps<IOrderInfor>["onFinish"] = async (values) => {
+    setIsLoading(true);
+
+    const totalPrice = getTotalFromCart(cart);
+
+    const detail: IOrderDetail[] = cart.map((item) => {
+      return {
+        bookName: item.detail.mainText,
+        _id: item.id,
+        quantity: item.quantity,
+      };
+    });
+
+    const res = await createOrder(
+      values.name,
+      values.address,
+      values.phone,
+      totalPrice,
+      values.paymentMethod,
+      detail,
+    );
+
+    if (res.data) {
+      //clear cart localStorage
+      localStorage.removeItem("cart");
+
+      //clear cart React Context
+      setCart([]);
+
+      //setCurrent -> 2
+      setCurrent(2);
+
+      //notification
+      message.success("Đặt hàng thành công!");
+    } else {
+      message.error("Có lỗi xảy ra!");
+    }
   };
   return (
     <>
@@ -245,20 +288,18 @@ const Step2 = (props: IProps) => {
         <Divider />
 
         <div style={{ textAlign: "center" }}>
-          <button
+          <Button
+            loading={isLoading}
             style={{
               width: "95%",
-              padding: "13px 15px",
-              backgroundColor: "#EE4D2D",
-              border: "1px solid #EE4D2D",
-              borderRadius: "3px",
-              color: "#fff",
-              cursor: "pointer",
+              padding: "20px",
             }}
+            color="danger"
+            variant="solid"
             onClick={() => form.submit()}
           >
             Đặt hàng ({cart.length})
-          </button>
+          </Button>
         </div>
       </Col>
     </>

@@ -11,6 +11,12 @@ declare global {
     phone: string;
     address: string;
   }
+
+  interface IOrderDetail {
+    bookName: string;
+    quantity: number;
+    _id: string;
+  }
 }
 
 export {};
