@@ -190,7 +190,7 @@ const UpdateInfo = (props: IProps) => {
 
           <Form.Item label={null}>
             <Button type="primary" htmlType="submit">
-              Submit
+              Update
             </Button>
           </Form.Item>
         </Form>

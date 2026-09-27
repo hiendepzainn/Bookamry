@@ -75,6 +75,17 @@ const updateInfoUser = (
   return instance1.put<unknown, IBackendResponse<string>>(url, data);
 };
 
+const changePassword = (email: string, oldpass: string, newpass: string) => {
+  const url = "/api/v1/user/change-password";
+  const data = {
+    email,
+    oldpass,
+    newpass,
+  };
+
+  return instance1.post<unknown, IBackendResponse<string>>(url, data);
+};
+
 export {
   getUserPaginate,
   createNewUser,
@@ -83,4 +94,5 @@ export {
   deleteUser,
   uploadFileAvatar,
   updateInfoUser,
+  changePassword,
 };

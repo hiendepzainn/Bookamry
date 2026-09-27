@@ -59,6 +59,12 @@ declare global {
     fullName: string;
     phone: string;
   }
+
+  interface IFieldChangePassword {
+    email: string;
+    currentPassword: string;
+    newPassword: string;
+  }
 }
 
 export {};

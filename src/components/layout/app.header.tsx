@@ -267,7 +267,7 @@ const AppHeader = () => {
     {
       key: "2",
       label: "Đổi mật khẩu",
-      children: <ChangePassword />,
+      children: <ChangePassword userModal={userModal} />,
     },
   ];
 
