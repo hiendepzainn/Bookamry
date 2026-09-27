@@ -53,6 +53,12 @@ declare global {
     fullName: string;
     phone: string;
   }
+
+  interface IUserUpdateInfo {
+    email: string;
+    fullName: string;
+    phone: string;
+  }
 }
 
 export {};

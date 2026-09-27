@@ -42,4 +42,45 @@ const deleteUser = (id: string) => {
   return instance1.delete<unknown, IBackendResponse<string>>(url);
 };
 
-export { getUserPaginate, createNewUser, importUsers, updateUser, deleteUser };
+const uploadFileAvatar = (file: File) => {
+  const url = "/api/v1/file/upload";
+  const formData = new FormData();
+  formData.append("fileImg", file);
+
+  return instance1.post<unknown, IBackendResponse<IDataUploadImage>>(
+    url,
+    formData,
+    {
+      headers: {
+        "upload-type": "avatar",
+      },
+    },
+  );
+};
+
+const updateInfoUser = (
+  _id: string,
+  fullName: string,
+  phone: string,
+  avatar: string,
+) => {
+  const url = "/api/v1/user";
+  const data = {
+    _id,
+    fullName,
+    phone,
+    avatar,
+  };
+
+  return instance1.put<unknown, IBackendResponse<string>>(url, data);
+};
+
+export {
+  getUserPaginate,
+  createNewUser,
+  importUsers,
+  updateUser,
+  deleteUser,
+  uploadFileAvatar,
+  updateInfoUser,
+};

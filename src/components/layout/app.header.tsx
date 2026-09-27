@@ -1,6 +1,6 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { MyContext } from "@/components/context/app.context";
-import type { MenuProps } from "antd";
+import type { MenuProps, TabsProps } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import {
   App,
@@ -11,9 +11,11 @@ import {
   Dropdown,
   Grid,
   Input,
+  Modal,
   Popover,
   Row,
   Space,
+  Tabs,
 } from "antd";
 import {
   SearchOutlined,
@@ -22,6 +24,8 @@ import {
 } from "@ant-design/icons";
 import { logout } from "@/services/auth.api";
 import { formatPrice } from "@/services/helpers";
+import UpdateInfo from "../others/update.info";
+import ChangePassword from "../others/change.password";
 
 const AppHeader = () => {
   const { useBreakpoint } = Grid;
@@ -33,6 +37,17 @@ const AppHeader = () => {
 
   const { user, authenticated, setAuthenticated, setUser, cart, setCart } =
     useContext(MyContext);
+
+  const [isModalUserInfoOpen, setIsModalUserInfoOpen] = useState(false);
+
+  const [userModal, setUserModal] = useState<IDataLoginUser>({
+    avatar: "",
+    email: "",
+    fullName: "",
+    id: "",
+    phone: "",
+    role: "",
+  });
 
   const handleLogout = async () => {
     const res = await logout();
@@ -62,7 +77,16 @@ const AppHeader = () => {
       : []),
     {
       key: "profile",
-      label: <Link to="/profile">Quản lý tài khoản</Link>,
+      label: (
+        <span
+          onClick={() => {
+            setUserModal(user);
+            setIsModalUserInfoOpen(true);
+          }}
+        >
+          Quản lý tài khoản
+        </span>
+      ),
     },
     {
       key: "orders",
@@ -229,100 +253,142 @@ const AppHeader = () => {
     );
   };
 
+  const items: TabsProps["items"] = [
+    {
+      key: "1",
+      label: "Cập nhật thông tin",
+      children: (
+        <UpdateInfo
+          userModal={userModal}
+          setIsModalUserInfoOpen={setIsModalUserInfoOpen}
+        />
+      ),
+    },
+    {
+      key: "2",
+      label: "Đổi mật khẩu",
+      children: <ChangePassword />,
+    },
+  ];
+
   return (
-    <header style={styles.header}>
-      {/* LEFT: Logo & Brand Name */}
-      <Link to="/" style={styles.leftSection}>
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg"
-          alt="React Logo"
-          style={styles.logo}
-        />
-        {screens.xs ? <></> : <span style={styles.brandName}>Bookamry</span>}
-      </Link>
+    <>
+      <header style={styles.header}>
+        {/* LEFT: Logo & Brand Name */}
+        <Link to="/" style={styles.leftSection}>
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg"
+            alt="React Logo"
+            style={styles.logo}
+          />
+          {screens.xs ? <></> : <span style={styles.brandName}>Bookamry</span>}
+        </Link>
 
-      {/* MIDDLE: Search Bar */}
-      <div style={styles.middleSection}>
-        <Input
-          prefix={<SearchOutlined style={{ color: "rgba(0,0,0,.45)" }} />}
-          placeholder="Bạn tìm gì hôm nay"
-          size="large"
-          style={styles.searchInput}
-        />
-      </div>
+        {/* MIDDLE: Search Bar */}
+        <div style={styles.middleSection}>
+          <Input
+            prefix={<SearchOutlined style={{ color: "rgba(0,0,0,.45)" }} />}
+            placeholder="Bạn tìm gì hôm nay"
+            size="large"
+            style={styles.searchInput}
+          />
+        </div>
 
-      {/* RIGHT: Cart & User Info */}
-      <div style={styles.rightSection}>
-        {/* Cart Section */}
+        {/* RIGHT: Cart & User Info */}
+        <div style={styles.rightSection}>
+          {/* Cart Section */}
 
-        {screens.xs ? (
-          <Link to={"/cart"}>
-            <Badge count={cart.length} offset={[-2, 4]} size="small">
-              <span>
-                <ShoppingCartOutlined style={styles.cartIcon} />
-              </span>
-            </Badge>
-          </Link>
-        ) : (
-          <Popover
-            placement="bottomRight"
-            title={
-              authenticated === false ? (
-                <div style={{ textAlign: "center", margin: "10px 0px 0px" }}>
-                  Vui lòng đăng nhập để thêm sản phẩm
-                </div>
-              ) : (
-                <>
-                  {cart.length === 0 ? (
-                    <div
-                      style={{ textAlign: "center", margin: "10px 0px 0px" }}
-                    >
-                      Hiện tại Giỏ hàng đang trống
-                    </div>
-                  ) : (
-                    "Sản phẩm mới thêm"
-                  )}
-                </>
-              )
-            }
-            content={contentPopover}
-          >
-            <Badge count={cart.length} offset={[-2, 4]} size="small">
-              <span>
-                <ShoppingCartOutlined style={styles.cartIcon} />
-              </span>
-            </Badge>
-          </Popover>
-        )}
-
-        {/* User Info Section (Hover Dropdown) */}
-        {!authenticated ? (
-          <Link to="/login">
-            <Button type="primary">Login</Button>{" "}
-          </Link>
-        ) : (
-          <Dropdown
-            menu={{ items: userMenuItems }}
-            placement="bottomRight"
-            arrow
-          >
-            <div style={styles.userInfo}>
-              <Space>
-                <Avatar
-                  icon={<UserOutlined />}
-                  src={`${import.meta.env.VITE_BACKEND_URL}/images/avatar/${user.avatar}`}
-                />
-                {screens.xs ? (
-                  <></>
+          {screens.xs ? (
+            <Link to={"/cart"}>
+              <Badge count={cart.length} offset={[-2, 4]} size="small">
+                <span>
+                  <ShoppingCartOutlined style={styles.cartIcon} />
+                </span>
+              </Badge>
+            </Link>
+          ) : (
+            <Popover
+              placement="bottomRight"
+              title={
+                authenticated === false ? (
+                  <div style={{ textAlign: "center", margin: "10px 0px 0px" }}>
+                    Vui lòng đăng nhập để thêm sản phẩm
+                  </div>
                 ) : (
-                  <span style={styles.userName}>{user.fullName}</span>
-                )}
-              </Space>
-            </div>
-          </Dropdown>
-        )}
-      </div>
-    </header>
+                  <>
+                    {cart.length === 0 ? (
+                      <div
+                        style={{ textAlign: "center", margin: "10px 0px 0px" }}
+                      >
+                        Hiện tại Giỏ hàng đang trống
+                      </div>
+                    ) : (
+                      "Sản phẩm mới thêm"
+                    )}
+                  </>
+                )
+              }
+              content={contentPopover}
+            >
+              <Badge count={cart.length} offset={[-2, 4]} size="small">
+                <span>
+                  <ShoppingCartOutlined style={styles.cartIcon} />
+                </span>
+              </Badge>
+            </Popover>
+          )}
+
+          {/* User Info Section (Hover Dropdown) */}
+          {!authenticated ? (
+            <Link to="/login">
+              <Button type="primary">Login</Button>{" "}
+            </Link>
+          ) : (
+            <Dropdown
+              menu={{ items: userMenuItems }}
+              placement="bottomRight"
+              arrow
+            >
+              <div style={styles.userInfo}>
+                <Space>
+                  <Avatar
+                    icon={<UserOutlined />}
+                    src={`${import.meta.env.VITE_BACKEND_URL}/images/avatar/${user.avatar}`}
+                  />
+                  {screens.xs ? (
+                    <></>
+                  ) : (
+                    <span style={styles.userName}>{user.fullName}</span>
+                  )}
+                </Space>
+              </div>
+            </Dropdown>
+          )}
+        </div>
+      </header>
+
+      <Modal
+        forceRender
+        footer={null}
+        width={"60vw"}
+        title="Quản lý tài khoản"
+        open={isModalUserInfoOpen}
+        onCancel={() => {
+          setIsModalUserInfoOpen(false);
+
+          setUserModal({
+            avatar: "",
+            email: "",
+            fullName: "",
+            id: "",
+            phone: "",
+            role: "",
+          });
+        }}
+      >
+        <Tabs defaultActiveKey="1" items={items} />
+      </Modal>
+    </>
   );
 };
 
