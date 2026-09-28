@@ -33,6 +33,21 @@ declare global {
     updatedAt: string;
     __v: number;
   }
+
+  interface IOrderManaging {
+    _id: string;
+    name: string;
+    address: string;
+    phone: string;
+    type: string;
+    paymentStatus: string;
+    paymentRef: string;
+    detail: IOrderDetail[];
+    totalPrice: number;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  }
 }
 
 export {};

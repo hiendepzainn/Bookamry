@@ -26,4 +26,12 @@ const getOrderList = () => {
   return instance1.get<unknown, IBackendResponse<IOrderTable[]>>(url);
 };
 
-export { createOrder, getOrderList };
+const getOrdersPaginate = (current: number, pageSize: number) => {
+  const url = `/api/v1/order?current=${current}&pageSize=${pageSize}`;
+  return instance1.get<
+    unknown,
+    IBackendResponse<IDataPaginate<IOrderManaging>>
+  >(url);
+};
+
+export { createOrder, getOrderList, getOrdersPaginate };

@@ -17,6 +17,7 @@ import Dashboard from "./pages/admin/dashboard";
 import BookDetails from "@/pages/guest/bookDetails/book";
 import Cart from "@/pages/user/cart/cart.tsx";
 import OrdersHistory from "./pages/user/orders/ordersHistory";
+import OrdersPageAdmin from "./pages/admin/orderManaging/orders";
 
 const router = createBrowserRouter([
   {
@@ -83,6 +84,17 @@ const router = createBrowserRouter([
           <AuthenticationRoute>
             <AuthorizationRoute>
               <UsersPageAdmin />
+            </AuthorizationRoute>
+          </AuthenticationRoute>
+        ),
+      },
+
+      {
+        path: "orders",
+        element: (
+          <AuthenticationRoute>
+            <AuthorizationRoute>
+              <OrdersPageAdmin />
             </AuthorizationRoute>
           </AuthenticationRoute>
         ),
