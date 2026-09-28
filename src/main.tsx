@@ -13,7 +13,7 @@ import AuthorizationRoute from "./components/auth/authorization";
 import LayoutAdmin from "./layout/layoutAdmin";
 import BooksPageAdmin from "./pages/admin/bookManaging/books";
 import UsersPageAdmin from "./pages/admin/userManaging/users";
-import HomepageAdmin from "./pages/admin/homepage";
+import Dashboard from "./pages/admin/dashboard";
 import BookDetails from "@/pages/guest/bookDetails/book";
 import Cart from "@/pages/user/cart/cart.tsx";
 import OrdersHistory from "./pages/user/orders/ordersHistory";
@@ -60,7 +60,7 @@ const router = createBrowserRouter([
         element: (
           <AuthenticationRoute>
             <AuthorizationRoute>
-              <HomepageAdmin />
+              <Dashboard />
             </AuthorizationRoute>
           </AuthenticationRoute>
         ),

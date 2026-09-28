@@ -9,6 +9,12 @@ declare global {
     from: string;
     to: string;
   }
+
+  interface IDataDashboard {
+    countOrder: number;
+    countUser: number;
+    countBook: number;
+  }
 }
 
 export {};

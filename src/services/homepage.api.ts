@@ -34,4 +34,9 @@ const getBookDetailsByID = (id: string) => {
   return instance1.get<unknown, IBackendResponse<IBookTable>>(url);
 };
 
-export { getBooksHomepage, getBookDetailsByID };
+const getDashboard = () => {
+  const url = "/api/v1/database/dashboard";
+  return instance1.get<unknown, IBackendResponse<IDataDashboard>>(url);
+};
+
+export { getBooksHomepage, getBookDetailsByID, getDashboard };
