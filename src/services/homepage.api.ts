@@ -7,6 +7,7 @@ const getBooksHomepage = (
   categoryList: string[],
   priceFrom: string,
   priceTo: string,
+  keyword: string,
 ) => {
   const defaultUrl = `/api/v1/book?current=${current}&pageSize=${pageSize}`;
 
@@ -22,7 +23,10 @@ const getBooksHomepage = (
   const queryTo = priceTo === "" ? "" : `&price<=${priceTo}`;
   const queryPrice = queryFrom + queryTo;
 
-  const url = defaultUrl + querySort + queryCategory + queryPrice;
+  const queryKeyword = keyword === "" ? "" : `&mainText=/${keyword}/i`;
+
+  const url =
+    defaultUrl + querySort + queryCategory + queryPrice + queryKeyword;
 
   return instance1.get<unknown, IBackendResponse<IDataPaginate<IBookTable>>>(
     url,

@@ -27,7 +27,14 @@ import { formatPrice } from "@/services/helpers";
 import UpdateInfo from "../others/update.info";
 import ChangePassword from "../others/change.password";
 
-const AppHeader = () => {
+interface IProps {
+  keyword: string;
+  setKeyword: (value: string) => void;
+}
+
+const AppHeader = (props: IProps) => {
+  const { keyword, setKeyword } = props;
+
   const { useBreakpoint } = Grid;
   const screens = useBreakpoint();
 
@@ -291,6 +298,15 @@ const AppHeader = () => {
             placeholder="Bạn tìm gì hôm nay"
             size="large"
             style={styles.searchInput}
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            allowClear={{
+              clearIcon: (
+                <span style={{ color: "rgba(0,0,0,0.45)", cursor: "pointer" }}>
+                  ✕
+                </span>
+              ),
+            }}
           />
         </div>
 
