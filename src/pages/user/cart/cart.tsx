@@ -1,12 +1,16 @@
 import { MyContext } from "@/components/context/app.context";
-import { Col, Row, Steps } from "antd";
+import { Breadcrumb, Col, Grid, Row, Steps } from "antd";
 import { useContext, useState } from "react";
 import Step1 from "./cartStep/step1";
 import Step2 from "./cartStep/step2";
 import Step3 from "./cartStep/step3";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
   const { cart, setCart } = useContext(MyContext);
+
+  const { useBreakpoint } = Grid;
+  const screens = useBreakpoint();
 
   const [current, setCurrent] = useState<number>(0);
 
@@ -39,6 +43,18 @@ const Cart = () => {
 
   return (
     <Row style={{ backgroundColor: "#e6e6e6", padding: "15px 40px" }}>
+      <Breadcrumb
+        style={{ margin: screens.md ? "20px 10px" : "10px 10px" }}
+        items={[
+          {
+            title: <Link to="/">Trang chủ</Link>,
+          },
+          {
+            title: "Chi tiết Giỏ hàng",
+          },
+        ]}
+      />
+
       <Col
         style={{
           backgroundColor: "#fff",

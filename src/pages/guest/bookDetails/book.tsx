@@ -6,11 +6,21 @@ import {
   PlusOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
-import { App, Col, Divider, Grid, Rate, Row, Skeleton, Space } from "antd";
+import {
+  App,
+  Breadcrumb,
+  Col,
+  Divider,
+  Grid,
+  Rate,
+  Row,
+  Skeleton,
+  Space,
+} from "antd";
 import { useContext, useEffect, useState } from "react";
 import ImageGallery, { GalleryItem } from "react-image-gallery";
 import "react-image-gallery/styles/image-gallery.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const BookDetails = () => {
   const { setCart, authenticated } = useContext(MyContext);
@@ -130,178 +140,200 @@ const BookDetails = () => {
   }, []);
 
   return (
-    <div
-      style={{
-        margin: screens.md ? "20px 30px" : "10px 10px",
-        boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-        padding: "20px 20px",
-      }}
-    >
-      <Row gutter={24}>
-        <Col xs={24} sm={24} md={10}>
-          {isLoading ? (
-            <Skeleton.Input
-              block
-              active
-              style={{ width: "100%", height: 350 }}
-            />
-          ) : (
-            <ImageGallery
-              items={imageList}
-              showPlayButton={false}
-              showFullscreenButton={false}
-              showNav={false}
-            />
-          )}
-        </Col>
+    <>
+      {screens.md ? (
+        <Breadcrumb
+          style={{ margin: "20px 30px" }}
+          items={[
+            {
+              title: <Link to="/">Trang chủ</Link>,
+            },
+            {
+              title: "Xem chi tiết Sách",
+            },
+          ]}
+        />
+      ) : (
+        <></>
+      )}
 
-        {screens.md ? <></> : <Divider style={{ margin: "15px 0px" }} />}
+      <div
+        style={{
+          margin: screens.md ? "15px 30px" : "10px 10px",
+          boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+          padding: "20px 20px",
+        }}
+      >
+        <Row gutter={24}>
+          <Col xs={24} sm={24} md={10}>
+            {isLoading ? (
+              <Skeleton.Input
+                block
+                active
+                style={{ width: "100%", height: 350 }}
+              />
+            ) : (
+              <ImageGallery
+                items={imageList}
+                showPlayButton={false}
+                showFullscreenButton={false}
+                showNav={false}
+              />
+            )}
+          </Col>
 
-        <Col xs={24} sm={24} md={14}>
-          {isLoading ? (
-            <>
-              <Skeleton active />
-              <br />
-              <Skeleton active />
-              <br />
-              <Space>
-                <Skeleton.Input active size={"default"} />
-                <Skeleton.Input active size={"default"} />
-              </Space>
-            </>
-          ) : (
-            <div>
+          {screens.md ? <></> : <Divider style={{ margin: "15px 0px" }} />}
+
+          <Col xs={24} sm={24} md={14}>
+            {isLoading ? (
+              <>
+                <Skeleton active />
+                <br />
+                <Skeleton active />
+                <br />
+                <Space>
+                  <Skeleton.Input active size={"default"} />
+                  <Skeleton.Input active size={"default"} />
+                </Space>
+              </>
+            ) : (
               <div>
-                Tác giả: <a>{book.author}</a>
-              </div>
+                <div>
+                  Tác giả: <a>{book.author}</a>
+                </div>
 
-              <div style={{ fontSize: "20px", margin: "5px 0px" }}>
-                {book.mainText}
-              </div>
+                <div style={{ fontSize: "20px", margin: "5px 0px" }}>
+                  {book.mainText}
+                </div>
 
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <Rate style={{ fontSize: "15px" }} disabled defaultValue={5} />
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <Rate
+                    style={{ fontSize: "15px" }}
+                    disabled
+                    defaultValue={5}
+                  />
 
-                <Divider type="vertical" />
+                  <Divider type="vertical" />
 
-                <div>{book.sold ? `${book.sold}` : "0"} đã bán</div>
-              </div>
+                  <div>{book.sold ? `${book.sold}` : "0"} đã bán</div>
+                </div>
 
-              <div
-                style={{
-                  fontSize: screens.md ? "28px" : "24px",
-                  fontWeight: "600",
-                  color: "#EE4D2D",
-                  padding: screens.md ? "20px 16px" : "10px 14px",
-                  backgroundColor: "#F9F9F9",
-                  margin: screens.md ? "10px 0px 20px" : "10px 0px 10px",
-                }}
-              >
-                {formatPrice(book.price)}
-              </div>
-
-              <div>
-                <Row>
-                  <Col lg={4} sm={6} xs={8}>
-                    <span>Vận chuyển</span>
-                  </Col>
-                  <Col lg={20} sm={18} xs={16}>
-                    <span>Miễn phí vận chuyển</span>
-                  </Col>
-                </Row>
-
-                <Row
+                <div
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    margin: "20px 0px",
+                    fontSize: screens.md ? "28px" : "24px",
+                    fontWeight: "600",
+                    color: "#EE4D2D",
+                    padding: screens.md ? "20px 16px" : "10px 14px",
+                    backgroundColor: "#F9F9F9",
+                    margin: screens.md ? "10px 0px 20px" : "10px 0px 10px",
                   }}
                 >
-                  <Col lg={4} sm={6} xs={8}>
-                    <span>Số lượng</span>
-                  </Col>
-
-                  <Col lg={20} sm={18} xs={16}>
-                    <button
-                      style={{
-                        width: "30px",
-                        height: "30px",
-                        backgroundColor: "#fff",
-                        border: "1px solid #ddd",
-                        cursor: "pointer",
-                      }}
-                      onClick={decreaseQuantity}
-                    >
-                      <MinusOutlined />
-                    </button>
-                    <button
-                      style={{
-                        width: "45px",
-                        height: "30px",
-                        backgroundColor: "#fff",
-                        border: "1px solid #ddd",
-                      }}
-                    >
-                      {countQuantity}
-                    </button>
-                    <button
-                      style={{
-                        width: "30px",
-                        height: "30px",
-                        backgroundColor: "#fff",
-                        border: "1px solid #ddd",
-                        cursor: "pointer",
-                      }}
-                      onClick={increaseQuantity}
-                    >
-                      <PlusOutlined />
-                    </button>
-                  </Col>
-                </Row>
+                  {formatPrice(book.price)}
+                </div>
 
                 <div>
-                  <Space size={"middle"}>
-                    <button
-                      style={{
-                        padding: "10px 15px",
-                        backgroundColor: "#FFEDEB",
-                        border: "1px solid #EE4D2D",
-                        borderRadius: "3px",
-                        color: "#EE4D2D",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => {
-                        if (!authenticated) {
-                          navigate("/login");
-                        } else {
-                          addBookToCart();
-                          message.success("Đã thêm sản phẩm vào Giỏ hàng");
-                        }
-                      }}
-                    >
-                      <ShoppingCartOutlined />
-                      <span> Thêm vào giỏ hàng</span>
-                    </button>
+                  <Row>
+                    <Col lg={4} sm={6} xs={8}>
+                      <span>Vận chuyển</span>
+                    </Col>
+                    <Col lg={20} sm={18} xs={16}>
+                      <span>Miễn phí vận chuyển</span>
+                    </Col>
+                  </Row>
 
-                    <button
-                      style={{
-                        padding: "10px 15px",
-                        backgroundColor: "#EE4D2D",
-                        border: "1px solid #EE4D2D",
-                        borderRadius: "3px",
-                        color: "#fff",
-                      }}
-                    >
-                      Mua ngay
-                    </button>
-                  </Space>
+                  <Row
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      margin: "20px 0px",
+                    }}
+                  >
+                    <Col lg={4} sm={6} xs={8}>
+                      <span>Số lượng</span>
+                    </Col>
+
+                    <Col lg={20} sm={18} xs={16}>
+                      <button
+                        style={{
+                          width: "30px",
+                          height: "30px",
+                          backgroundColor: "#fff",
+                          border: "1px solid #ddd",
+                          cursor: "pointer",
+                        }}
+                        onClick={decreaseQuantity}
+                      >
+                        <MinusOutlined />
+                      </button>
+                      <button
+                        style={{
+                          width: "45px",
+                          height: "30px",
+                          backgroundColor: "#fff",
+                          border: "1px solid #ddd",
+                        }}
+                      >
+                        {countQuantity}
+                      </button>
+                      <button
+                        style={{
+                          width: "30px",
+                          height: "30px",
+                          backgroundColor: "#fff",
+                          border: "1px solid #ddd",
+                          cursor: "pointer",
+                        }}
+                        onClick={increaseQuantity}
+                      >
+                        <PlusOutlined />
+                      </button>
+                    </Col>
+                  </Row>
+
+                  <div>
+                    <Space size={"middle"}>
+                      <button
+                        style={{
+                          padding: "10px 15px",
+                          backgroundColor: "#FFEDEB",
+                          border: "1px solid #EE4D2D",
+                          borderRadius: "3px",
+                          color: "#EE4D2D",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          if (!authenticated) {
+                            navigate("/login");
+                          } else {
+                            addBookToCart();
+                            message.success("Đã thêm sản phẩm vào Giỏ hàng");
+                          }
+                        }}
+                      >
+                        <ShoppingCartOutlined />
+                        <span> Thêm vào giỏ hàng</span>
+                      </button>
+
+                      <button
+                        style={{
+                          padding: "10px 15px",
+                          backgroundColor: "#EE4D2D",
+                          border: "1px solid #EE4D2D",
+                          borderRadius: "3px",
+                          color: "#fff",
+                        }}
+                      >
+                        Mua ngay
+                      </button>
+                    </Space>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </Col>
-      </Row>
-    </div>
+            )}
+          </Col>
+        </Row>
+      </div>
+    </>
   );
 };
 
