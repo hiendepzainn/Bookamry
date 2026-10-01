@@ -8,6 +8,7 @@ const Step3 = () => {
         backgroundColor: "#fff",
         marginLeft: "10px",
         borderRadius: "8px",
+        marginBottom: "250px",
       }}
       span={23}
     >

@@ -7,6 +7,7 @@ import {
   Divider,
   Form,
   FormProps,
+  Grid,
   Input,
   Radio,
   Row,
@@ -23,6 +24,9 @@ interface IProps {
 
 const Step2 = (props: IProps) => {
   const { getTotalFromCart, cart, setCurrent, setCart } = props;
+
+  const { useBreakpoint } = Grid;
+  const screens = useBreakpoint();
 
   const [form] = Form.useForm();
 
@@ -77,7 +81,7 @@ const Step2 = (props: IProps) => {
   };
   return (
     <>
-      <Col span={17}>
+      <Col span={screens.md ? 17 : 24}>
         {cart.map((item) => {
           return (
             <Row
@@ -85,17 +89,30 @@ const Step2 = (props: IProps) => {
               style={{
                 backgroundColor: "#fff",
                 margin: "0px 0px 12px",
-                height: "15vh",
+                ...(screens.md && { height: "15vh" }),
                 padding: "10px",
                 boxSizing: "content-box",
                 borderRadius: "5px",
               }}
             >
-              <Col style={{ height: "100%" }} span={3}>
+              {!screens.md && (
+                <Col
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                  span={24}
+                >
+                  {item.detail.mainText}
+                </Col>
+              )}
+
+              <Col style={{ height: "100%" }} span={screens.md ? 3 : 6}>
                 <div
                   style={{
                     height: "100%",
                     width: "100%",
+                    margin: screens.md ? "0px" : "10px 0px",
                   }}
                 >
                   <img
@@ -108,68 +125,133 @@ const Step2 = (props: IProps) => {
                   />
                 </div>
               </Col>
-              <Col
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  padding: "0px 0px 0px 30px",
-                }}
-                span={8}
-              >
-                {item.detail.mainText}
-              </Col>
+
+              {!screens.md && <Col span={5}></Col>}
+
+              {screens.md && (
+                <Col
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "0px 0px 0px 30px",
+                  }}
+                  span={8}
+                >
+                  {item.detail.mainText}
+                </Col>
+              )}
+
+              {screens.md && (
+                <Col
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  span={3}
+                >
+                  {formatPrice(item.detail.price)}
+                </Col>
+              )}
+
               <Col
                 style={{
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                 }}
-                span={3}
+                span={screens.md ? 3 : 8}
               >
-                {formatPrice(item.detail.price)}
+                <div>
+                  Số lượng: <b>{item.quantity}</b>
+                </div>
               </Col>
-              <Col
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                span={3}
-              >
-                <div>SL: {item.quantity}</div>
-              </Col>
-              <Col
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                span={6}
-              >
-                <Space>
-                  <span>Tổng:</span>
-                  <span style={{ fontSize: "15px", fontWeight: "500" }}>
-                    {formatPrice(item.detail.price * item.quantity)}
-                  </span>
-                </Space>
-              </Col>
+
+              {!screens.md && <Col span={4}></Col>}
+
+              {screens.md && (
+                <Col
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  span={6}
+                >
+                  <Space>
+                    <span>Tổng:</span>
+                    <span style={{ fontSize: "15px", fontWeight: "500" }}>
+                      {formatPrice(item.detail.price * item.quantity)}
+                    </span>
+                  </Space>
+                </Col>
+              )}
+
+              {!screens.md && (
+                <Col span={24}>
+                  <Space>
+                    <span>Tổng:</span>
+                    <span style={{ fontSize: "15px", fontWeight: "500" }}>
+                      {formatPrice(item.detail.price * item.quantity)}
+                    </span>
+                  </Space>
+                </Col>
+              )}
             </Row>
           );
         })}
-        <Button type="primary" onClick={() => setCurrent(0)}>
-          Quay lại
-        </Button>
+
+        {screens.md && (
+          <Button type="primary" onClick={() => setCurrent(0)}>
+            Quay lại
+          </Button>
+        )}
       </Col>
 
       <Col
         style={{
           backgroundColor: "#fff",
           padding: "15px 15px",
-          marginLeft: "20px",
+          marginLeft: screens.md ? "20px" : "0px",
+          marginTop: !screens.md ? "10px" : "0px",
           borderRadius: "5px",
         }}
-        span={6}
+        span={screens.md ? 6 : 24}
       >
+        {!screens.md && (
+          <>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <span>Tạm tính</span>
+              <span style={{ fontSize: "16px" }}>
+                {formatPrice(getTotalFromCart(cart))}
+              </span>
+            </div>
+
+            <Divider />
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <span>Tổng tiền</span>
+              <span style={{ fontSize: "25px", color: "#EE4D2D" }}>
+                {formatPrice(getTotalFromCart(cart))}
+              </span>
+            </div>
+
+            <Divider />
+          </>
+        )}
+
         <Form onFinish={onFinish} form={form} layout="vertical">
           <Form.Item<IOrderInfor>
             name={"paymentMethod"}
@@ -257,35 +339,39 @@ const Step2 = (props: IProps) => {
           </Form.Item>
         </Form>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <span>Tạm tính</span>
-          <span style={{ fontSize: "16px" }}>
-            {formatPrice(getTotalFromCart(cart))}
-          </span>
-        </div>
+        {screens.md && (
+          <>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <span>Tạm tính</span>
+              <span style={{ fontSize: "16px" }}>
+                {formatPrice(getTotalFromCart(cart))}
+              </span>
+            </div>
 
-        <Divider />
+            <Divider />
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <span>Tổng tiền</span>
-          <span style={{ fontSize: "25px", color: "#EE4D2D" }}>
-            {formatPrice(getTotalFromCart(cart))}
-          </span>
-        </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <span>Tổng tiền</span>
+              <span style={{ fontSize: "25px", color: "#EE4D2D" }}>
+                {formatPrice(getTotalFromCart(cart))}
+              </span>
+            </div>
 
-        <Divider />
+            <Divider />
+          </>
+        )}
 
         <div style={{ textAlign: "center" }}>
           <Button
