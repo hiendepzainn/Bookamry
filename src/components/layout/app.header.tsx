@@ -111,14 +111,6 @@ const AppHeader = (props: IProps) => {
       ),
       danger: true,
     },
-    {
-      key: "413",
-      label: <Link to="/books">books client</Link>,
-    },
-    {
-      key: "235",
-      label: <Link to="/checkout">checkout</Link>,
-    },
   ];
 
   const styles: Record<string, React.CSSProperties> = {

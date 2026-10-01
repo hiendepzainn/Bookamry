@@ -1,11 +1,14 @@
 import { getOrderList } from "@/services/cart.api";
 import { formatDate, formatPrice } from "@/services/helpers";
-import { Divider, Table, Tag } from "antd";
+import { Divider, Grid, Table, Tag } from "antd";
 import type { TableProps } from "antd";
 import { useEffect, useState } from "react";
 import OrdersDrawer from "./ordersDrawer";
 
 const OrdersHistory = () => {
+  const { useBreakpoint } = Grid;
+  const screens = useBreakpoint();
+
   const [data, setData] = useState<IOrderTable[]>();
   const [dataDrawer, setDataDrawer] = useState<IOrderTable>({
     _id: "",
@@ -50,13 +53,17 @@ const OrdersHistory = () => {
         return formatPrice(value);
       },
     },
-    {
-      title: "Trạng thái",
-      key: "status",
-      render: () => {
-        return <Tag color="green">Thành công</Tag>;
-      },
-    },
+    ...(screens.md
+      ? [
+          {
+            title: "Trạng thái",
+            key: "status",
+            render: () => {
+              return <Tag color="green">Thành công</Tag>;
+            },
+          },
+        ]
+      : []),
     {
       title: "Chi tiết",
       key: "details",
