@@ -320,23 +320,31 @@ const Homepage = () => {
                 </div>
 
                 <div>
-                  <Rate disabled defaultValue={4} />
-                  <span>trở lên</span>
+                  <Space>
+                    <Rate disabled defaultValue={4} />
+                    <span> trở lên</span>
+                  </Space>
                 </div>
 
                 <div>
-                  <Rate disabled defaultValue={3} />
-                  <span>trở lên</span>
+                  <Space>
+                    <Rate disabled defaultValue={3} />
+                    <span> trở lên</span>
+                  </Space>
                 </div>
 
                 <div>
-                  <Rate disabled defaultValue={2} />
-                  <span>trở lên</span>
+                  <Space>
+                    <Rate disabled defaultValue={2} />
+                    <span> trở lên</span>
+                  </Space>
                 </div>
 
                 <div>
-                  <Rate disabled defaultValue={1} />
-                  <span>trở lên</span>
+                  <Space>
+                    <Rate disabled defaultValue={1} />
+                    <span> trở lên</span>
+                  </Space>
                 </div>
               </div>
             </div>

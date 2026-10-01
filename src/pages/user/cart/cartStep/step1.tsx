@@ -1,6 +1,6 @@
 import { formatPrice } from "@/services/helpers";
 import { DeleteTwoTone } from "@ant-design/icons";
-import { Col, Divider, Empty, InputNumber, Row, Space } from "antd";
+import { Col, Divider, Empty, Grid, InputNumber, Row, Space } from "antd";
 
 interface IProps {
   setCart: (value: IBookInCart[]) => void;
@@ -11,6 +11,9 @@ interface IProps {
 
 const Step1 = (props: IProps) => {
   const { setCart, cart, getTotalFromCart, setCurrent } = props;
+
+  const { useBreakpoint } = Grid;
+  const screens = useBreakpoint();
 
   const changeInputNumber = (id: string, value: number | null) => {
     if (value == null) return;
@@ -37,7 +40,7 @@ const Step1 = (props: IProps) => {
 
   return (
     <>
-      <Col span={17}>
+      <Col span={screens.md ? 17 : 24}>
         {cart.map((item) => {
           return (
             <Row
@@ -45,18 +48,31 @@ const Step1 = (props: IProps) => {
               style={{
                 backgroundColor: "#fff",
                 margin: "0px 0px 12px",
-                height: "15vh",
+                ...(screens.md && { height: "15vh" }),
                 padding: "10px",
                 boxSizing: "content-box",
                 borderRadius: "5px",
               }}
             >
-              <Col style={{ height: "100%" }} span={3}>
+              {!screens.md && (
+                <Col
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                  span={24}
+                >
+                  {item.detail.mainText}
+                </Col>
+              )}
+
+              <Col style={{ height: "100%" }} span={screens.md ? 3 : 6}>
                 <div
                   style={{
                     // backgroundColor: "red",
                     height: "100%",
                     width: "100%",
+                    margin: screens.md ? "0px" : "10px 0px",
                   }}
                 >
                   <img
@@ -69,33 +85,42 @@ const Step1 = (props: IProps) => {
                   />
                 </div>
               </Col>
-              <Col
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  padding: "0px 0px 0px 30px",
-                }}
-                span={8}
-              >
-                {item.detail.mainText}
-              </Col>
+
+              {!screens.md && <Col span={5}></Col>}
+
+              {screens.md && (
+                <Col
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "0px 0px 0px 30px",
+                  }}
+                  span={8}
+                >
+                  {item.detail.mainText}
+                </Col>
+              )}
+
+              {screens.md && (
+                <Col
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  span={3}
+                >
+                  {formatPrice(item.detail.price)}
+                </Col>
+              )}
+
               <Col
                 style={{
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                 }}
-                span={3}
-              >
-                {formatPrice(item.detail.price)}
-              </Col>
-              <Col
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                span={3}
+                span={screens.md ? 3 : 8}
               >
                 <InputNumber
                   min={1}
@@ -104,21 +129,27 @@ const Step1 = (props: IProps) => {
                   onChange={(value) => changeInputNumber(item.id, value)}
                 />
               </Col>
-              <Col
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                span={6}
-              >
-                <Space>
-                  <span>Tổng:</span>
-                  <span style={{ fontSize: "15px", fontWeight: "500" }}>
-                    {formatPrice(item.detail.price * item.quantity)}
-                  </span>
-                </Space>
-              </Col>
+
+              {!screens.md && <Col span={4}></Col>}
+
+              {screens.md && (
+                <Col
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  span={6}
+                >
+                  <Space>
+                    <span>Tổng:</span>
+                    <span style={{ fontSize: "15px", fontWeight: "500" }}>
+                      {formatPrice(item.detail.price * item.quantity)}
+                    </span>
+                  </Space>
+                </Col>
+              )}
+
               <Col
                 style={{
                   display: "flex",
@@ -132,6 +163,24 @@ const Step1 = (props: IProps) => {
                   onClick={() => deleteBookById(item.id)}
                 />
               </Col>
+
+              {!screens.md && (
+                <Col
+                  // style={{
+                  //   display: "flex",
+                  //   alignItems: "center",
+                  //   justifyContent: "center",
+                  // }}
+                  span={24}
+                >
+                  <Space>
+                    <span>Tổng:</span>
+                    <span style={{ fontSize: "15px", fontWeight: "500" }}>
+                      {formatPrice(item.detail.price * item.quantity)}
+                    </span>
+                  </Space>
+                </Col>
+              )}
             </Row>
           );
         })}
@@ -144,10 +193,10 @@ const Step1 = (props: IProps) => {
         style={{
           backgroundColor: "#fff",
           padding: "15px 15px",
-          marginLeft: "20px",
+          marginLeft: screens.md ? "20px" : "0px",
           borderRadius: "5px",
         }}
-        span={6}
+        span={screens.md ? 6 : 24}
       >
         <div
           style={{

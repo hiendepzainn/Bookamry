@@ -42,7 +42,12 @@ const Cart = () => {
   };
 
   return (
-    <Row style={{ backgroundColor: "#e6e6e6", padding: "15px 40px" }}>
+    <Row
+      style={{
+        backgroundColor: "#e6e6e6",
+        padding: screens.md ? "15px 40px" : "5px 10px",
+      }}
+    >
       <Breadcrumb
         style={{ margin: screens.md ? "20px 10px" : "10px 10px" }}
         items={[
