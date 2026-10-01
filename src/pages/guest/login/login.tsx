@@ -1,6 +1,6 @@
 import { MyContext } from "@/components/context/app.context";
 import { login } from "@/services/auth.api";
-import { App, Button, Divider, Form, Input } from "antd";
+import { App, Button, Divider, Form, Grid, Input } from "antd";
 import type { FormProps } from "antd";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,6 +9,9 @@ const LoginPage = () => {
   const { setAuthenticated, setUser } = useContext(MyContext);
   const { notification, message } = App.useApp();
   const navigate = useNavigate();
+
+  const { useBreakpoint } = Grid;
+  const screens = useBreakpoint();
 
   const [loading, setLoading] = useState(false);
 
@@ -46,7 +49,7 @@ const LoginPage = () => {
     >
       <div
         style={{
-          width: "35vw",
+          width: screens.md ? "35vw" : "70vw",
           padding: "25px",
           marginTop: "20px",
           borderRadius: "10px",

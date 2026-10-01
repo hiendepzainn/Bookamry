@@ -1,5 +1,5 @@
 import { register } from "@/services/auth.api";
-import { App, Button, Divider, Form, Input } from "antd";
+import { App, Button, Divider, Form, Grid, Input } from "antd";
 import type { FormProps } from "antd";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,6 +7,9 @@ import { Link, useNavigate } from "react-router-dom";
 const RegisterPage = () => {
   const navigate = useNavigate();
   const { message } = App.useApp();
+
+  const { useBreakpoint } = Grid;
+  const screens = useBreakpoint();
 
   const [loading, setLoading] = useState(false);
 
@@ -34,7 +37,7 @@ const RegisterPage = () => {
     >
       <div
         style={{
-          width: "35vw",
+          width: screens.md ? "35vw" : "70vw",
           padding: "25px",
           marginTop: "20px",
           borderRadius: "10px",
