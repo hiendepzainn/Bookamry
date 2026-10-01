@@ -349,7 +349,9 @@ const AppHeader = (props: IProps) => {
           {/* User Info Section (Hover Dropdown) */}
           {!authenticated ? (
             <Link to="/login">
-              <Button type="primary">Login</Button>{" "}
+              <Button style={{ marginRight: "10px" }} type="primary">
+                Login
+              </Button>{" "}
             </Link>
           ) : (
             <Dropdown

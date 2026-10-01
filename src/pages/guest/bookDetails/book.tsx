@@ -322,6 +322,14 @@ const BookDetails = () => {
                           borderRadius: "3px",
                           color: "#fff",
                         }}
+                        onClick={() => {
+                          if (!authenticated) {
+                            navigate("/login");
+                          } else {
+                            addBookToCart();
+                            navigate("/cart");
+                          }
+                        }}
                       >
                         Mua ngay
                       </button>
