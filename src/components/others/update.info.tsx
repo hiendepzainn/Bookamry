@@ -120,7 +120,7 @@ const UpdateInfo = (props: IProps) => {
           }}
           onChange={changeUpload}
         >
-          <Button icon={<UploadOutlined />}>Click to Upload</Button>
+          <Button icon={<UploadOutlined />}>Upload</Button>
         </Upload>
       </Col>
       <Col span={14}>

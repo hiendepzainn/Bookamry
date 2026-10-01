@@ -1,5 +1,5 @@
 import { changePassword } from "@/services/user.api";
-import { App, Button, Col, Form, FormProps, Input, Row } from "antd";
+import { App, Button, Col, Form, FormProps, Grid, Input, Row } from "antd";
 import { useEffect } from "react";
 
 interface IProps {
@@ -10,6 +10,9 @@ const ChangePassword = (props: IProps) => {
   const { userModal } = props;
 
   const { notification } = App.useApp();
+
+  const { useBreakpoint } = Grid;
+  const screens = useBreakpoint();
 
   const [form] = Form.useForm<IFieldChangePassword>();
 
@@ -42,7 +45,7 @@ const ChangePassword = (props: IProps) => {
 
   return (
     <Row>
-      <Col span={12}>
+      <Col span={screens.md ? 12 : 24}>
         <Form onFinish={onFinish} form={form} layout="vertical">
           <Form.Item<IFieldChangePassword> name={"email"} label="Email">
             <Input disabled />

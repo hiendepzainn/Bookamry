@@ -386,7 +386,7 @@ const AppHeader = (props: IProps) => {
       <Modal
         forceRender
         footer={null}
-        width={"60vw"}
+        width={screens.md ? "60vw" : "95vw"}
         title="Quản lý tài khoản"
         open={isModalUserInfoOpen}
         onCancel={() => {
