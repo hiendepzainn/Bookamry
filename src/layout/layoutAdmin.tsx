@@ -88,11 +88,7 @@ const LayoutAdmin = () => {
 
   const adminMenuItems: MenuProps["items"] = [
     {
-      key: "profile",
-      label: <Link to="/profile">Quản lý tài khoản</Link>,
-    },
-    {
-      key: "orders",
+      key: "homepage",
       label: <Link to="/">Trang chủ</Link>,
     },
     {
