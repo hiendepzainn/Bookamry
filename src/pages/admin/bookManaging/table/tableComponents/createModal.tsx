@@ -171,7 +171,7 @@ const BookCreateModal = (props: IProps) => {
                   message: "Vui lòng không bỏ trống!",
                 },
                 {
-                  pattern: /^[a-zA-ZÀ-ỹ\s]+$/,
+                  pattern: /^[a-zA-ZÀ-ỹ\s.,-]+$/,
                   message: "Chỉ được phép nhập chữ cái!",
                 },
               ]}
