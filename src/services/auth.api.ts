@@ -20,7 +20,7 @@ const fetchAccount = () => {
     IBackendResponse<IDataFetchAccount<IDataLoginUser>>
   >(url, {
     headers: {
-      delay: 1000,
+      delay: 0,
     },
   });
 };
